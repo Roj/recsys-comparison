@@ -98,6 +98,7 @@ ENV/
 /data/* #ignore data
 /data/ml-100k
 /data/lastfm-2k
+/data/bookcrossings
 !/data/*.yml #but keep config files
 *.zip
 analyze-output.ipynb #for now we're not interested. maybe latter we'll add a dir for them 

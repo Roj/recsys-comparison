@@ -16,7 +16,8 @@ New datasets can easily be added:
 1. Configure a `.yml` file and put it under `data/`. You can use the other files as a template. In essence, you just need to specify the file which will hold the data once the zip has been downloaded and decompressed (gradle takes care of the two latter tasks).
 2. Add the dataset name to the list of possible datasets, in line 8 of `build.gradle`. Change line 9 if you want to use the new datasets.
 3. Modify the `fetchData` task on `build.gradle` to download the new dataset. Just copy the code and change the variable values.
-4. Do the same with the `crossfold` task so it runs the right `.yml` file.
+4. Do the same with the `crossfold` task so it runs the right `.yml` file.   
+5. Remember to add the new data directory to `.gitignore` so that git doesn't pick up any large files.
 
 ### How to add new algorithms
 
