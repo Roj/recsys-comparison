@@ -96,5 +96,7 @@ ENV/
 /.gradle
 *.iml
 /data/* #ignore data
+/data/ml-100k
+/data/lastfm-2k
 !/data/*.yml #but keep config files
 *.zip
