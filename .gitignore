@@ -87,3 +87,14 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+#Gradle and data config
+
+/.idea
+/.idea_modules
+/.gradle
+*.iml
+/data/* #ignore data
+!/data/*.yml #but keep config files
+*.zip

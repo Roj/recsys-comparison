@@ -1,0 +1,5 @@
+ratings:
+  file: lastfm-2k/user_artists.dat
+  format: tsv
+  header: true
+  entity_type: rating

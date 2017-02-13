@@ -1,0 +1,164 @@
+/* This file may be freely modified, used, and redistributed without restriction. */
+/* Set up the repositories to get the LensKit plugin.
+ * This configuration pulls in things needed for the build.gradle script itself */
+
+System.setProperty("jsse.enableSNIExtension","false");
+
+//Choose dataset:
+//one of: movielens lastfm
+def dataset = "movielens"
+
+buildscript {
+    repositories {
+        // LensKit snapshots are published to the Sonatype snapshot repository
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        // LensKit releases are published to Maven Central
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.lenskit:lenskit-gradle:3.0-M2'
+    }
+}
+
+apply plugin: 'java' // if you use Groovy or Scala, add those plugins
+apply plugin: 'lenskit'
+
+/* Set up the repositories for getting LensKit and other libraries.
+ * These repositories are used for your Java or Groovy code, and for running LensKit.
+ */
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    // Code needs to build with LensKit.
+    compile "org.lenskit:lenskit-all:3.0-M2"
+    // To run the code, we also need the LensKit CLI.
+    runtime "org.lenskit:lenskit-cli:3.0-M2"
+
+    // Tests use JUnit
+    testCompile "junit:junit:4.12"
+}
+
+/* Configure LensKit */
+lenskit {
+    // you can configure the threadCount and maxMemory here, or on the command line
+    // e.g. -PthreadCount=8
+}
+
+import org.lenskit.gradle.*
+
+/* Download the corresponding data set */
+task fetchData {
+    description 'Fetches the corresponding data set.'
+
+    //Define the variables for the dataset
+    def include_name
+    def url_src
+
+    if(dataset.equals("movielens")) {
+        ext.dataDir = "data/ml-100k"
+        ext.zipFile = "data/ml-100k.zip"
+    
+        include_name = 'ml-100k/*'
+        url_src = 'http://files.grouplens.org/papers/ml-100k.zip'
+    } else if(dataset.equals("lastfm")) {
+        ext.dataDir = "data/lastfm-2k/"
+        ext.zipFile = "data/lastfm-2k.zip"
+    
+        include_name = '*'
+        url_src = 'http://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip'
+    }
+
+    outputs.dir dataDir
+    outputs.file zipFile
+    doLast {
+        mkdir dataDir
+        ant {
+            get(src: url_src,
+                dest: zipFile,
+                skipExisting: false)
+            unzip(src: zipFile, dest: dataDir) {
+                patternset {
+                    include name: include_name 
+                }
+                mapper type: 'flatten'
+            }
+        }
+    }
+}
+
+task crossfold(type: Crossfold, group: 'evaluate') {
+    // download data before evaluating
+    dependsOn fetchData
+
+    if(dataset.equals("movielens")) {
+        input 'data/ml-100k.yml'
+    } else if(dataset.equals("lastfm")) {
+        input 'data/lastfm-2k.yml'
+    }
+    // test on random 1/5 of each user's ratings
+    holdoutFraction(0.2, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+}
+
+/* Run the LensKit evaluation */
+task evaluate(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    logFile "$buildDir/evaluate.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dataSet crossfold
+
+    // send the output to appropriate files
+    outputFile "$buildDir/eval-results.csv"
+    userOutputFile "$buildDir/eval-users.csv"
+
+    // configure our algorithms
+    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
+    algorithm 'ItemItem', 'algorithms/item-item.groovy'
+    algorithm 'Custom', 'algorithms/custom.groovy'
+	algorithm 'UserUser', 'algorithms/user-user.groovy'
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+        metric 'ndcg'
+    }
+    recommend {
+        listSize 10
+        metric 'mrr'
+    }
+}
+
+task analyzeResults(type: Exec, group: 'evaluate') {
+    description 'Post-processes evaluation results to draw charts.'
+
+    dependsOn evaluate
+
+    inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
+    outputs.file "$buildDir/analysis.html"
+
+    /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
+    if (project.hasProperty('ipython.bin')) {
+        executable project.getProperty('ipython.bin')
+    } else {
+        executable 'jupyter'
+    }
+    args 'nbconvert', '--to', 'html', '--execute'
+    args '--output', file("$buildDir/analysis.html")
+    args file("analyze-output.ipynb")
+}
+
+task cleanData {
+    doLast {
+        delete 'data'
+    }
+}
