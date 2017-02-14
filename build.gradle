@@ -50,7 +50,6 @@ lenskit {
     // you can configure the threadCount and maxMemory here, or on the command line
 	maxMemory '14g'
     // e.g. -PthreadCount=8
-    maxMemory '10g'
 }
 
 
