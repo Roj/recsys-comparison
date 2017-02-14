@@ -48,6 +48,7 @@ dependencies {
 /* Configure LensKit */
 lenskit {
     // you can configure the threadCount and maxMemory here, or on the command line
+	maxMemory '14g'
     // e.g. -PthreadCount=8
     maxMemory '10g'
 }
@@ -81,7 +82,7 @@ task fetchData {
         ext.zipFile = "data/bookcrossings.zip"
     
         include_name = '*'
-        url_src = 'https://doc-0g-b4-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/rksl1ff9qrd7hpsl9ktls3eaun4acm28/1486958400000/08040946599696835472/*/0B2lSBow_51i-X25lSlNsS09wRTQ?e=download'
+        url_src = 'http://drive.google.com/uc?export=download&id=0B2lSBow_51i-X25lSlNsS09wRTQ'
     } else if(dataset.equals("jester")){
         ext.dataDir = "data/jester/"
         ext.zipFile = "data/jester.zip"
