@@ -1,0 +1,5 @@
+ratings:
+  file: jester/jester.tsv
+  format: tsv
+  header: false
+  entity_type: rating
