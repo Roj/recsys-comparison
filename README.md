@@ -7,7 +7,25 @@ Initial setup is taken from [eval-quickstart](https://github.com/lenskit/eval-qu
 
 ### How to run
 
-To run a model, just run `./gradlew evaluate`. To change the dataset, modify line 9 of `build.gradle`. You can process results with `./gradlew analyzeResults`, which will run the ipython notebook and generate an HTML page.
+To run a model, just run 
+
+`./gradlew evaluate`. 
+
+To change the dataset, modify line 9 of `build.gradle`. You can process results with `./gradlew analyzeResults`, which will run the ipython notebook and generate an HTML page or just supply dataset parameter
+
+`./gradlew  -Pdataset=movielens evaluate`.
+
+### How to analyze
+
+To run a model, just run 
+
+`./gradlew analyzeResults`.
+
+or selecting dataset
+
+`./gradlew -Pdataset=movielens analyzeResults`. 
+
+Results are under build/results/[dataset].
 
 ### How to add new datasets
 

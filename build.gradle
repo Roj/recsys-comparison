@@ -6,7 +6,8 @@ System.setProperty("jsse.enableSNIExtension","false");
 
 //Choose dataset:
 //one of: movielens lastfm bookcrossings jester
-def dataset = "jester"
+// or use -Pdataset=[dataset]
+def dataset = "movielens"
 
 buildscript {
     repositories {
@@ -133,12 +134,18 @@ task evaluate(type: TrainTest, group: 'evaluate') {
     logFile "$buildDir/evaluate.log"
     logFileLevel 'DEBUG'
 
+    if (project.hasProperty('dataset')) {
+        dataset = project.dataset
+    }
+    
+    def datasetResultFolder = "$buildDir/results/"+dataset
+
     // we add our crossfold task as evaluation input
     dataSet crossfold
 
     // send the output to appropriate files
-    outputFile "$buildDir/eval-results.csv"
-    userOutputFile "$buildDir/eval-users.csv"
+    outputFile datasetResultFolder+"/eval-results.csv"
+    userOutputFile datasetResultFolder+"/eval-users.csv"
 
     // configure our algorithms
     algorithm 'PersMean', 'algorithms/pers-mean.groovy'
@@ -162,8 +169,9 @@ task analyzeResults(type: Exec, group: 'evaluate') {
 
     dependsOn evaluate
 
-    inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
-    outputs.file "$buildDir/analysis.html"
+    def datasetResultFolder = "$buildDir/results/"+dataset
+    inputs.files datasetResultFolder+"/eval-results.csv", 'analyze-output.ipynb'
+    outputs.file datasetResultFolder+"/analysis.html"
 
     /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
     if (project.hasProperty('ipython.bin')) {
@@ -172,7 +180,7 @@ task analyzeResults(type: Exec, group: 'evaluate') {
         executable 'jupyter'
     }
     args 'nbconvert', '--to', 'html', '--execute'
-    args '--output', file("$buildDir/analysis.html")
+    args '--output', file(datasetResultFolder+"/analysis.html")
     args file("analyze-output.ipynb")
 }
 
