@@ -87,7 +87,7 @@ task fetchData {
         ext.zipFile = "data/jester.zip"
 
         include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AZ0Z1dmtSYjhjYW8&export=download'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AWTQ1SG1lUmUxd1E&export=download'
     }
 
     outputs.dir dataDir
