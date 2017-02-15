@@ -137,13 +137,13 @@ task evaluate(type: TrainTest, group: 'evaluate') {
     if (project.hasProperty('dataset')) {
         dataset = project.dataset
     }
-    
-    def datasetResultFolder = "$buildDir/results/"+dataset
 
     // we add our crossfold task as evaluation input
     dataSet crossfold
 
     // send the output to appropriate files
+    def datasetResultFolder = "$buildDir/results/"+dataset
+
     outputFile datasetResultFolder+"/eval-results.csv"
     userOutputFile datasetResultFolder+"/eval-users.csv"
 
@@ -162,15 +162,26 @@ task evaluate(type: TrainTest, group: 'evaluate') {
         listSize 10
         metric 'mrr'
     }
+
+    doLast{
+        description 'Copy to use in analyze'
+        copy {
+            from datasetResultFolder+"/eval-results.csv"
+            into "$buildDir"
+        }
+        copy {
+            from datasetResultFolder+"/eval-users.csv"
+            into "$buildDir"
+        }
+    }
 }
 
 task analyzeResults(type: Exec, group: 'evaluate') {
     description 'Post-processes evaluation results to draw charts.'
-
     dependsOn evaluate
 
     def datasetResultFolder = "$buildDir/results/"+dataset
-    inputs.files datasetResultFolder+"/eval-results.csv", 'analyze-output.ipynb'
+    inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
     outputs.file datasetResultFolder+"/analysis.html"
 
     /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
@@ -182,6 +193,7 @@ task analyzeResults(type: Exec, group: 'evaluate') {
     args 'nbconvert', '--to', 'html', '--execute'
     args '--output', file(datasetResultFolder+"/analysis.html")
     args file("analyze-output.ipynb")
+
 }
 
 task cleanData {
