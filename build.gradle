@@ -7,7 +7,17 @@ System.setProperty("jsse.enableSNIExtension","false");
 //Choose dataset:
 //one of: movielens lastfm bookcrossings jester
 // or use -Pdataset=[dataset]
-def dataset = "movielens"
+def dataset
+def datasetResultFolder = "$buildDir/results/"+dataset
+
+task setDataset {
+    if (project.hasProperty('dataset')) {
+        dataset = project.dataset
+    } else {
+        dataset = "movielens"
+    }
+    datasetResultFolder = "$buildDir/results/"+dataset
+}
 
 buildscript {
     repositories {
@@ -53,13 +63,12 @@ lenskit {
     // e.g. -PthreadCount=8
 }
 
-
-
 import org.lenskit.gradle.*
 
 /* Download the corresponding data set */
 task fetchData {
-    description 'Fetches the corresponding data set.'
+    dependsOn setDataset
+    description 'Fetches the corresponding data set. '+ dataset
 
     //Define the variables for the dataset
     def include_name
@@ -112,6 +121,7 @@ task fetchData {
 task crossfold(type: Crossfold, group: 'evaluate') {
     // download data before evaluating
     dependsOn fetchData
+    println 'Dataset '+dataset
 
     if(dataset.equals("movielens")) {
         input 'data/ml-100k.yml'
@@ -126,6 +136,19 @@ task crossfold(type: Crossfold, group: 'evaluate') {
     holdoutFraction(0.2, 'random')
     // use 5-fold cross-validation
     partitionCount 5
+
+    outputDir "$buildDir/crossfold/"+dataset
+}
+
+task getCrossfoldData {
+    doLast {
+        description 'Copy to use in analyze'
+        delete "$buildDir/crossfold.out"
+        copy {
+            from "$buildDir/crossfold/"+dataset
+            into "$buildDir/crossfold.out"
+        }
+    }
 }
 
 /* Run the LensKit evaluation */
@@ -134,15 +157,13 @@ task evaluate(type: TrainTest, group: 'evaluate') {
     logFile "$buildDir/evaluate.log"
     logFileLevel 'DEBUG'
 
-    if (project.hasProperty('dataset')) {
-        dataset = project.dataset
-    }
-
     // we add our crossfold task as evaluation input
+//    dataSet "$buildDir/crossfold/"+dataset+"/datasets.yaml"
+//    dataSet crossfold
+    dependsOn getCrossfoldData
     dataSet crossfold
 
     // send the output to appropriate files
-    def datasetResultFolder = "$buildDir/results/"+dataset
 
     outputFile datasetResultFolder+"/eval-results.csv"
     userOutputFile datasetResultFolder+"/eval-users.csv"
@@ -162,6 +183,10 @@ task evaluate(type: TrainTest, group: 'evaluate') {
         listSize 10
         metric 'mrr'
     }
+}
+
+task evaluateOutputs {
+    dependsOn evaluate
 
     doLast{
         description 'Copy to use in analyze'
@@ -178,9 +203,8 @@ task evaluate(type: TrainTest, group: 'evaluate') {
 
 task analyzeResults(type: Exec, group: 'evaluate') {
     description 'Post-processes evaluation results to draw charts.'
-    dependsOn evaluate
+    dependsOn evaluateOutputs
 
-    def datasetResultFolder = "$buildDir/results/"+dataset
     inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
     outputs.file datasetResultFolder+"/analysis.html"
 
@@ -194,6 +218,10 @@ task analyzeResults(type: Exec, group: 'evaluate') {
     args '--output', file(datasetResultFolder+"/analysis.html")
     args file("analyze-output.ipynb")
 
+    doLast {
+        delete "$buildDir/eval-results.csv"
+        delete "$buildDir/eval-users.csv"
+    }
 }
 
 task cleanData {
