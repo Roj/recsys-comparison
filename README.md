@@ -7,7 +7,25 @@ Initial setup is taken from [eval-quickstart](https://github.com/lenskit/eval-qu
 
 ### How to run
 
-To run a model, just run `./gradlew evaluate`. To change the dataset, modify line 9 of `build.gradle`. You can process results with `./gradlew analyzeResults`, which will run the ipython notebook and generate an HTML page.
+To run a model, just run 
+
+`./gradlew evaluate`. 
+
+To change the dataset, modify line 9 of `build.gradle`. You can process results with `./gradlew analyzeResults`, which will run the ipython notebook and generate an HTML page or just supply dataset parameter
+
+`./gradlew  -Pdataset=movielens evaluate`.
+
+### How to analyze
+
+To run a model, just run 
+
+`./gradlew analyzeResults`.
+
+or selecting dataset
+
+`./gradlew -Pdataset=movielens analyzeResults`. 
+
+Results are under build/results/[dataset].
 
 ### How to add new datasets
 
@@ -26,7 +44,7 @@ In a similar fashion:
 1. Add a new groovy configuration file for the algorithm under `algorithms/`.  
 2. Add the new algorithm in the `evaluate` task in `build.gradle`.
 
-Referencias: 
+## References: 
 
 · [Said, A & Bellogin, A: Comparative Recommender System Evaluation: Benchmarking Recommendation Frameworks](https://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdfhttps://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdf)  
 · [Ekstrand, M. D., Lenskit reference](https://md.ekstrandom.net/research/thesis/mde-thesis.pdf)  
