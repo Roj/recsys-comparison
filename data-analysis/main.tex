@@ -1,0 +1,80 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Recsys Data Analysis}
+
+\begin{document}
+\maketitle
+\section{Results}
+%%Reemplazar por tabla de LATEX
+
+\includegraphics[scale=0.75]{Tabla.png}
+
+
+\section{Datasets}
+\subsection{LastFM}
+Comparable value: times that each user listen a song grouped by artists
+\subsection{Movielens}
+Comparable value: user rating [1,5]
+\subsection{Jester}
+Comparable value: user rating [-10,10] normalized to [1,5]
+
+\section{Metrics}
+\subsection{RMSE}
+It is calculated in two ways:
+\begin{itemize}
+	\item Grouped by user: RMSE.byUser
+	\begin{equation}
+		\frac{\displaystyle\sum_{\forall\ user\ j}\sqrt{\frac{\displaystyle\sum_{\forall\ rating\ i} err_{ij}^2}{Total\ ratings\ user\ i}}}{Total\ users}
+    \end{equation}
+    \item Globally: RMSE.byRating 
+	\begin{equation}
+		\sqrt{\frac{\displaystyle\sum_{\forall\ user\ j}\displaystyle\sum_{\forall\ rating\ i} err_{ij}^2}{Total\ ratings}}
+    \end{equation}
+\end {itemize}
+
+In general, both ways gives similar results.
+
+In the case of LastFM, while grouping by users the results are approximately a third of the obtained using the Global expression.
+
+%Las medidas calculadas de ambas formas dan muy parecidas en general.
+%Para el caso de lastfm la diferencia que calcula es de un tercio cuando se agrupa por usuario.
+%Intentar entender esto: Pareciera que los usuarios se comportan muy diferente entre si pero no logro entender como.
+
+\subsection{MRR}
+
+This metric gives particular good results for Jester. That seems to be caused by the reduced number of items in the dataset (only 100 jokes). We could say that it is easier to "guess" the correct ranking in Jester than in the other datasets because of it has less items to order.
+Also it's curious that MRR result for Movielens using CF item-item are approximately 40 times better than the outcome for the same metric, the same dataset, but with other algorithms.
+
+%Performa especialmente bien para el caso de jester. Esto parece deberse a que la cantidad de items es mucho menor que para los otros casos (100)
+%Es decir que es más simple poner un ranking correcto.
+
+%Para el caso de movielens es inusualmente acertado con esta medida el itemitem por varias ordenes de magnitud (40 veces). Si bien la diferencia
+
+\section{Algorithms}
+\subsection{CF Item-item}
+For the rating evaluations, is the algorithm with the best performance in Jester and Movielens. But with LastFm it is worse than CF User-user.
+
+
+%Es el que mejor performa para los casos de rating: jester, movielens. 3% mejor
+%Para el caso lastfm performa bastante peor: 29%
+
+
+
+
+
+
+\end{document}
