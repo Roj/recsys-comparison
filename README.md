@@ -44,7 +44,7 @@ In a similar fashion:
 1. Add a new groovy configuration file for the algorithm under `algorithms/`.  
 2. Add the new algorithm in the `evaluate` task in `build.gradle`.
 
-Referencias: 
+## References: 
 
 · [Said, A & Bellogin, A: Comparative Recommender System Evaluation: Benchmarking Recommendation Frameworks](https://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdfhttps://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdf)  
 · [Ekstrand, M. D., Lenskit reference](https://md.ekstrandom.net/research/thesis/mde-thesis.pdf)  

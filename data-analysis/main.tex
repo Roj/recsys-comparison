@@ -26,14 +26,28 @@
 
 \section{Datasets}
 \subsection{LastFM}
-Comparable value: times that each user listen a song grouped by artists
+\#Users: 1892 users \\
+\#Items: 17632 artists \\
+This dataset contains 92.834 user-artist relations. Each relation represents the number of times a user listened to an artist. In order to run the recommender system algorithms, we decided to consider this counter as a kind of rating.
+
 \subsection{Movielens}
-Comparable value: user rating [1,5]
+\#Users: 943 users \\
+\#Items: 1682  movies \\
+This dataset contains 100.000 user-movie relations. Each relation represents the evaluation of a movie by a user (in a scale from 1 to 5).
+
 \subsection{Jester}
-Comparable value: user rating [-10,10] normalized to [1,5]
+\#Users: 73.495 users \\
+\#Items: 100 jokes \\
+This dataset contains 4.1 million of user-joke relations. Each relation represents the evaluation of a movie by a user (in a scale from -10.0 to 10.0). As the scale is different to the used in Movielens, we decided to normalized the evaluations to a scale of [1,5]. Thus, the results of running the algorithm with Jester and Movielens can be comparable.
+
+\subsection{Bookcrossing}
+\#Users: 278.858 users \\
+\#Items: 271.379 books \\
+This dataset contains 1.149.780 of user-book relations. Each relation represents the evaluation of a book by a user. Also with this dataset, we normalized the ratings to a scale of [1,5].
 
 \section{Metrics}
 \subsection{RMSE}
+RMSE reflects the difference between the real values and those predicted by the algorithm.
 It is calculated in two ways:
 \begin{itemize}
 	\item Grouped by user: RMSE.byUser
@@ -48,14 +62,13 @@ It is calculated in two ways:
 
 In general, both ways gives similar results.
 
-In the case of LastFM, while grouping by users the results are approximately a third of the obtained using the Global expression.
+In the case of LastFM, while grouping by users, the results are approximately a third of those obtained using the Global expression.
 
 %Las medidas calculadas de ambas formas dan muy parecidas en general.
 %Para el caso de lastfm la diferencia que calcula es de un tercio cuando se agrupa por usuario.
 %Intentar entender esto: Pareciera que los usuarios se comportan muy diferente entre si pero no logro entender como.
 
 \subsection{MRR}
-
 This metric gives particular good results for Jester. That seems to be caused by the reduced number of items in the dataset (only 100 jokes). We could say that it is easier to "guess" the correct ranking in Jester than in the other datasets because of it has less items to order.
 Also it's curious that MRR result for Movielens using CF item-item are approximately 40 times better than the outcome for the same metric, the same dataset, but with other algorithms.
 
