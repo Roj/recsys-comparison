@@ -26,9 +26,9 @@
 \begin{tabular}{lllll}
 \hline
 Algorithm & Avg. of RMSE.ByUser & Avg. of RMSE.ByRating & \multicolumn{1}{c}{Avg. of Predict.nDCG} & Avg. of MRR \\ \hline
-ItemItem  & 1455.425755            & 4469.689135              & 0.734481196                                 & 0.001738894    \\
-PersMean  & 1225.316632            & 3052.545397              & 0.811768122                                 & 0.000650303    \\
-UserUser  & 1226.077364            & 3251.001417              & 0.743536709                                 & 0.001728617   
+ItemItem  & 1455            & 4469              & 0.7344                                 & 0.001738    \\
+PersMean  & 1225            & 3052              & 0.8117                                 & 0.000650    \\
+UserUser  & 1226            & 3251              & 0.7435                                 & 0.001728   
 \end{tabular}
 \end{table}
 
@@ -39,9 +39,9 @@ UserUser  & 1226.077364            & 3251.001417              & 0.743536709     
 \begin{tabular}{lllll}
 \hline
 Algorithm & Avg. of RMSE.ByUser & Avg. of RMSE.ByRating & \multicolumn{1}{c}{Avg. of Predict.nDCG} & Avg. of MRR \\ \hline
-ItemItem  & 0.890329159            & 0.896982711              & 0.955260097                                 & 0.095015162    \\
-PersMean  & 0.920828036            & 0.93823614               & 0.949940793                                 & 0.002643017    \\
-UserUser  & 0.915197144            & 0.924923196              & 0.953311329                                 & 0.003773996   
+ItemItem  & 0.8903            & 0.8969              & 0.9552                                 & 0.09501    \\
+PersMean  & 0.9208            & 0.9382              & 0.9499                                 & 0.00264    \\
+UserUser  & 0.9151            & 0.9249              & 0.9533                                 & 0.00377   
 \end{tabular}
 \end{table}
 
@@ -53,9 +53,9 @@ UserUser  & 0.915197144            & 0.924923196              & 0.953311329     
 \hline
 Algorithm & Avg. of RMSE.ByUser & Avg. of RMSE.ByRating & \multicolumn{1}{c}{Avg. of Predict.nDCG} & Avg. of MRR \\ \hline
 
-ItemItem  & 0,790645               & 0,834773                 & 0,951061                                    & 0,611854       \\
-PersMean  & 0,826521               & 0,87686                  & 0,944675                                    & 0,61771        \\
-UserUser  & 0,796074               & 0,836992                 & 0,951285                                    & 0,712654      
+ItemItem  & 0.7906               & 0.8347                 & 0.9510                                   & 0.6118       \\
+PersMean  & 0.8265               & 0.8768                 & 0.9446                                   & 0.6177       \\
+UserUser  & 0.7960               & 0.8369                 & 0.9512                                   & 0.7127     
 \end{tabular}
 \end{table}
 
@@ -64,22 +64,28 @@ UserUser  & 0,796074               & 0,836992                 & 0,951285        
 \subsection{LastFM}
 \#Users: 1892 users \\
 \#Items: 17632 artists \\
-This dataset contains 92.834 user-artist relations. Each relation represents the number of times a user listened to an artist. In order to run the recommender system algorithms, we decided to consider this counter as a kind of rating.
+This dataset contains 92.834 user-artist relations. The weight of the graph's edges represents \textit{amount of plays}. We considered these weights as ratings.
 
-\subsection{Movielens}
-\#Users: 943 users \\
+In this iteration of the analysis we did not normalize the numbers into a $[1,5]$ scale. It can be done by classifying each relation into its respective quintile. This approach, however, has the drawback of discretizing something that is very continuous; for example, relationships that are on the upper scale of a quintile are qualitatively similar to those on the lower scale of the next quintile, but we are losing that information. Another consequence (which may not be a problem, but it is an interesting result nonetheless) is that each class will have exactly the same amount of members (relationships). As datasets that include a normal rating system often do not have this property, it may be appealing to run the algorithms on this normalized dataset.   
+
+Another approach is inspired by the Manhattan distance; in essence, calculate the mean of the ratings and for each rating calculate how many standard deviations it strays from the mean. Those that are deviated to higher values are assigned a value near to 5 and ratings that deviate from the mean but by being lower are assigned values near to 1. This might have the effect of having ratings form a normal distribution, which is also not common in ``true'' rating datasets.
+
+\subsection{Movielens-1k}
+\#Users: 943 users \
 \#Items: 1682  movies \\
 This dataset contains 100.000 user-movie relations. Each relation represents the evaluation of a movie by a user (in a scale from 1 to 5).
 
 \subsection{Jester}
 \#Users: 73.495 users \\
 \#Items: 100 jokes \\
-This dataset contains 4.1 million of user-joke relations. Each relation represents the evaluation of a movie by a user (in a scale from -10.0 to 10.0). As the scale is different to the used in Movielens, we decided to normalized the evaluations to a scale of [1,5]. Thus, the results of running the algorithm with Jester and Movielens can be comparable.
+This dataset contains 4.1 million of user-joke relations. Each relation represents the evaluation of a movie by a user (in a scale from -10.0 to 10.0). As the scale is different to the used in Movielens, we decided to normalized the evaluations to a scale of [1,5]. 
+
+This dataset is really unique as the number of items, in this case \textit{jokes}, is only 100. One of the consequences of this property is that the user-item matrix is not as sparse as it normally is elsewhere. It wouldn't be unusual for one user to have rated a majority of the items; in contrast, this would have been unthinkable in other datasets like MovieLens or Amazon-Books. The quantitative characterization of this dataset (and the rest) remains as future work (see \textbf{Conclusions} for details).
 
 \subsection{Bookcrossing}
 \#Users: 278.858 users \\
 \#Items: 271.379 books \\
-This dataset contains 1.149.780 of user-book relations. Each relation represents the evaluation of a book by a user. Also with this dataset, we normalized the ratings to a scale of [1,5].
+This dataset contains 1.149.780 of user-book relations. Each relation represents the evaluation of a book by a user. 
 
 \section{Metrics}
 \subsection{RMSE}
@@ -88,17 +94,17 @@ It is calculated in two ways:
 \begin{itemize}
 	\item Grouped by user: RMSE.byUser
 	\begin{equation}
-		\frac{\displaystyle\sum_{\forall\ user\ j}\sqrt{\frac{\displaystyle\sum_{\forall\ rating\ i} err_{ij}^2}{Total\ ratings\ user\ i}}}{Total\ users}
+		\frac{\displaystyle\sum_{\forall u\in U}\sqrt{\frac{\displaystyle\sum_{\forall r \in R} err_{ru}^2}{|R_u|}}}{|U|}
     \end{equation}
     \item Globally: RMSE.byRating 
 	\begin{equation}
-		\sqrt{\frac{\displaystyle\sum_{\forall\ user\ j}\displaystyle\sum_{\forall\ rating\ i} err_{ij}^2}{Total\ ratings}}
+		\sqrt{\frac{\displaystyle\sum_{\forall u \in U}\displaystyle\sum_{\forall r \in R} err_{ru}^2}{|R|}}
     \end{equation}
 \end {itemize}
 
-In general, both ways gives similar results.
+In general, both formulae give similar results.
 
-In the case of LastFM, while grouping by users, the results are approximately a third of those obtained using the Global expression. And it is interesting to see that the values are enormous in comparison to those obtained with Movielens and Jester.
+In the case of LastFM, while grouping by users, the results are approximately a third of those obtained using the global expression.
 
 %Las medidas calculadas de ambas formas dan muy parecidas en general.
 %Para el caso de lastfm la diferencia que calcula es de un tercio cuando se agrupa por usuario.
@@ -106,8 +112,9 @@ In the case of LastFM, while grouping by users, the results are approximately a 
 
 \subsection{MRR}
 This metric measures the ranking quality of the algorithm.
-This metric gives particular good results for Jester. That seems to be caused by the reduced number of items in the dataset (only 100 jokes). We could say that it is easier to "guess" the correct ranking in Jester than in the other datasets because of it has less items to order.
-Also it's curious that MRR result for Movielens using CF item-item are approximately 40 times better than the outcome for the same metric, the same dataset, but with other algorithms.
+MRR gives particularly good results for Jester. That seems to be caused by the reduced number of items in the dataset (only 100 jokes). So it could be easier to ``guess'' the correct ranking in Jester than in the other datasets because of it has less items to order, as diversity isn't guaranteed at all. This contrasts with other datasets where there are many \textit{niche} genres and communities.
+
+It is noteworthy that MRR result for Movielens using item-item CF are approximately $40$ times better than the result for the same metric, the same dataset, but with other algorithms.
 
 %Performa especialmente bien para el caso de jester. Esto parece deberse a que la cantidad de items es mucho menor que para los otros casos (100)
 %Es decir que es más simple poner un ranking correcto.
@@ -115,11 +122,11 @@ Also it's curious that MRR result for Movielens using CF item-item are approxima
 %Para el caso de movielens es inusualmente acertado con esta medida el itemitem por varias ordenes de magnitud (40 veces). Si bien la diferencia
 
 \subsection{nDCG}
-nDCG also reflects the ranking performance of an algorithm. For Jester and Movielens, we can see that it has a similar behavior to that of MRR. But in LastFM dataset, its worst result coincides with the best results of MRR.
+nDCG also reflects the ranking performance of an algorithm. For Jester and Movielens, we can see that it has a similar behavior to that of MRR. But in LastFM dataset, its worst result co-occurs with the best results of MRR.
 
 \section{Algorithms}
 \subsection{CF Item-item}
-For the rating evaluations (MRR), CF Item-item is the algorithm with the best performance in LastFM and Movielens. But with Jester it is worse than CF User-user.
+For the rating evaluations (MRR), item-item CF is the algorithm with the best performance in LastFM and Movielens. But with Jester it is worse than CF User-user.
 
 \subsection{PersMean}
 This algorithm has the best RMSE performance for Jester and Movielens, while in LastFM the other algorithms perform better.
@@ -127,12 +134,22 @@ This algorithm has the best RMSE performance for Jester and Movielens, while in 
 \subsection{CF User-user}
 In general CF User-user has good, but not outstanding, RMSE results with Jester and Movielens. Also, in Jester the best MRR results are obtained by CF User-user.
 
+\subsection{FunkSVD}
+We have added FSVD to the repository but we have yet to run all the datasets with this algorithm.
+
 %Es el que mejor performa para los casos de rating: jester, movielens. 3% mejor
 %Para el caso lastfm performa bastante peor: 29%
 
 
 \section{Conclusions}
-Although we didn't do enough analysis to deduce solid conclusions, we can see that the behavior of the algorithms with LastFM is notoriously different to the one with the other datasets. This is probably a consequence of the fact that the relation between user-item is not an explicit evaluation, like in the other datasets, it is the number of times the user listened to the item (artist).
-Nevertheless, our intention is to perform grid-search, in order to obtained stronger conclusions.
+Although we didn't do enough analysis to deduce solid conclusions, we can see that the behavior of the algorithms with LastFM is notoriously different to the one with the other datasets. This is probably a consequence of the fact that the relation between user-item is not an explicit evaluation, like in the other datasets, it is the number of times the user listened to the item (artist). We have also noted that the datasets are very different in their topology, so it may be interesting to look further into the properties of each one to be able to compare them more appropiately.
+
+Future work can be summarized as:
+\begin{description}
+\item[More algorithms] We have already added FunkSVD but we haven't yet compiled the results for all datasets.
+\item[More datasets] We'll begin by adding percentages of big datasets (like Amazon). We have also tried to get the CiteULike dataset but the email listed on the site page appears to be non-reachable, we are currently searching for other options to get the data.
+\item[Analysis of each dataset] As each dataset listed has very different properties (compare Jester to Amazon, for example), it might be worthwhile to see how they differ.
+\item[Grid-search] Analysis of hyperparameters is needed in order to obtain stronger conclusions.
+\end{description}
 
 \end{document}
