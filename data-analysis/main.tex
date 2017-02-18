@@ -68,7 +68,7 @@ This dataset contains 92.834 user-artist relations. The weight of the graph's ed
 
 In this iteration of the analysis we did not normalize the numbers into a $[1,5]$ scale. It can be done by classifying each relation into its respective quintile. This approach, however, has the drawback of discretizing something that is very continuous; for example, relationships that are on the upper scale of a quintile are qualitatively similar to those on the lower scale of the next quintile, but we are losing that information. Another consequence (which may not be a problem, but it is an interesting result nonetheless) is that each class will have exactly the same amount of members (relationships). As datasets that include a normal rating system often do not have this property, it may be appealing to run the algorithms on this normalized dataset.   
 
-Another approach is inspired by the Manhattan distance; in essence, calculate the mean of the ratings and for each rating calculate how many standard deviations it strays from the mean. Those that are deviated to higher values are assigned a value near to 5 and ratings that deviate from the mean but by being lower are assigned values near to 1. This might have the effect of having ratings form a normal distribution, which is also not common in ``true'' rating datasets.
+Another approach is inspired by the Mahalanobis distance; in essence, calculate the mean of the ratings and for each rating calculate how many standard deviations it strays from the mean. Those that are deviated to higher values are assigned a value near to 5 and ratings that deviate from the mean but by being lower are assigned values near to 1. This might have the effect of having ratings form a normal distribution, which is also not common in ``true'' rating datasets.
 
 \subsection{Movielens-1k}
 \#Users: 943 users \
@@ -80,7 +80,7 @@ This dataset contains 100.000 user-movie relations. Each relation represents the
 \#Items: 100 jokes \\
 This dataset contains 4.1 million of user-joke relations. Each relation represents the evaluation of a movie by a user (in a scale from -10.0 to 10.0). As the scale is different to the used in Movielens, we decided to normalized the evaluations to a scale of [1,5]. 
 
-This dataset is really unique as the number of items, in this case \textit{jokes}, is only 100. One of the consequences of this property is that the user-item matrix is not as sparse as it normally is elsewhere. It wouldn't be unusual for one user to have rated a majority of the items; in contrast, this would have been unthinkable in other datasets like MovieLens or Amazon-Books. The quantitative characterization of this dataset (and the rest) remains as future work (see \textbf{Conclusions} for details).
+This dataset is really unique as the number of items, in this case \textit{jokes}, is only 100. One of the consequences of this property is that the user-item matrix is not as sparse as it normally is elsewhere. It wouldn't be unusual for one user to have rated a majority of the items; in contrast, this would have been unthinkable in other datasets like MovieLens or Amazon-Books. The quantitative characterization of this dataset (and the rest) remains as future work (see \textbf{conclusions} for details).
 
 \subsection{Bookcrossing}
 \#Users: 278.858 users \\
@@ -147,7 +147,7 @@ Although we didn't do enough analysis to deduce solid conclusions, we can see th
 Future work can be summarized as:
 \begin{description}
 \item[More algorithms] We have already added FunkSVD but we haven't yet compiled the results for all datasets.
-\item[More datasets] We'll begin by adding percentages of big datasets (like Amazon). We have also tried to get the CiteULike dataset but the email listed on the site page appears to be non-reachable, we are currently searching for other options to get the data.
+\item[More datasets] We'll begin by adding small parts of big datasets (like Amazon). We have also tried to get the CiteULike dataset but the email listed on the site page appears to be non-reachable, we are currently searching for other options to get the data.
 \item[Analysis of each dataset] As each dataset listed has very different properties (compare Jester to Amazon, for example), it might be worthwhile to see how they differ.
 \item[Grid-search] Analysis of hyperparameters is needed in order to obtain stronger conclusions.
 \end{description}
