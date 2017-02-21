@@ -225,6 +225,23 @@ task analyzeResults(type: Exec, group: 'evaluate') {
     }
 }
 
+task analyzeAllResults(type: Exec, group: 'evaluate') {
+    description 'Post-processes evaluation results to draw charts from data-analysis folder'
+
+    inputs.files 'analyze-output.ipynb'
+    outputs.file "data-analysis/analysis.html"
+
+    /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
+    if (project.hasProperty('ipython.bin')) {
+        executable project.getProperty('ipython.bin')
+    } else {
+        executable 'jupyter'
+    }
+    args 'nbconvert', '--to', 'html', '--execute'
+    args '--output', file("data-analysis/analysis.html")
+    args file("analyze-output.ipynb")
+}
+
 task cleanData {
     doLast {
         delete 'data'
