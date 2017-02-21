@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-video-games/ratings_Video_Games.csv
+  format: csv
+  header: false
+  entity_type: rating

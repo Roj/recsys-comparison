@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-grocery-gourmet-food/ratings_Grocery_and_Gourmet_Food.csv
+  format: csv
+  header: false
+  entity_type: rating

@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-instant-video/ratings_Amazon_Instant_Video.csv
+  format: csv
+  header: false
+  entity_type: rating

@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-pet-supplies/ratings_Pet_Supplies.csv
+  format: csv
+  header: false
+  entity_type: rating
