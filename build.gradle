@@ -58,8 +58,12 @@ dependencies {
 /* Configure LensKit */
 lenskit {
     // you can configure the threadCount and maxMemory here, or on the command line
-	maxMemory lenskitMaxMemory
-    threadCount lenskitThreadCount.toInteger()
+    if (project.hasProperty('lenskitMaxMemory')) {
+        maxMemory lenskitMaxMemory
+    }
+    if (project.hasProperty('lenskitThreadCount')) {
+        threadCount = lenskitThreadCount.toInteger()
+    }
 }
 
 import org.lenskit.gradle.*
