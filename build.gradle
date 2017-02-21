@@ -2,7 +2,6 @@
 /* Set up the repositories to get the LensKit plugin.
  * This configuration pulls in things needed for the build.gradle script itself */
 
-System.setProperty("jsse.enableSNIExtension","false");
 
 //Choose dataset:
 //one of: movielens lastfm bookcrossings jester
@@ -59,8 +58,8 @@ dependencies {
 /* Configure LensKit */
 lenskit {
     // you can configure the threadCount and maxMemory here, or on the command line
-	maxMemory '14g'
-    // e.g. -PthreadCount=8
+	maxMemory lenskitMaxMemory
+    threadCount lenskitThreadCount.toInteger()
 }
 
 import org.lenskit.gradle.*

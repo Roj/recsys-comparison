@@ -1,5 +1,0 @@
-ratings:
-  file: bookcrossings/BX-Book-Ratings_.csv
-  format: csv
-  header: false
-  entity_type: rating

@@ -15,11 +15,22 @@ To change the dataset, modify line 9 of `build.gradle`. You can process results 
 
 `./gradlew  -Pdataset=movielens evaluate`.
 
+### Properties
+This properties my need overwrite. Creating a gradle.properties file in root folder is recommended
+
+
+```
+System.setProperty('jsse.enableSNIExtension','false');
+lenskitMaxMemory=10g
+lenskitThreadCount=2
+```
+
+
 ### How to analyze
 
 To run a model, just run 
 
-`./gradlew analyzeResults`.
+`./gradlew analyzeResults`
 
 or selecting dataset
 
