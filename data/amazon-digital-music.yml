@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-digital-music/ratings_Digital_Music.csv
+  format: csv
+  header: false
+  entity_type: rating
