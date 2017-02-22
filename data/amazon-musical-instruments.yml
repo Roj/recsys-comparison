@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-musical-instruments/ratings_Musical_Instruments.csv
+  format: csv
+  header: false
+  entity_type: rating

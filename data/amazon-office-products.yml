@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-office-products/ratings_Office_Products.csv
+  format: csv
+  header: false
+  entity_type: rating

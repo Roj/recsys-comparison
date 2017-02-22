@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-patio-lawn-garden/ratings_Patio_Lawn_and_Garden.csv
+  format: csv
+  header: false
+  entity_type: rating

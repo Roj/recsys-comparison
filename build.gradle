@@ -101,6 +101,60 @@ task fetchData {
 
         include_name = '*'
         url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AWTQ1SG1lUmUxd1E&export=download'
+    } else if(dataset.equals("amazon-musical-instruments")){
+        ext.dataDir = "data/amazon-musical-instruments/"
+        ext.zipFile = "data/ratings_Musical_Instruments.zip"
+
+        include_name = '*'
+        url_src = 'https://doc-0s-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ciltrn27fjgb06k3pi117m8psgpf2m1o/1487692800000/13305965733609396212/*/0B1Iw4oNXJh2AUDdYTDBMTHFDQk0?e=download'
+    } else if(dataset.equals("amazon-instant-video")){
+        ext.dataDir = "data/amazon-instant-video/"
+        ext.zipFile = "data/ratings_Amazon_Instant_Video.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AR2ppUTZwNUJhcFU&export=download'
+    } else if(dataset.equals("amazon-digital-music")){
+        ext.dataDir = "data/amazon-digital-music/"
+        ext.zipFile = "data/ratings_Digital_Music.zip"
+
+        include_name = '*'
+        url_src = 'https://doc-0g-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/78osragsd6ttfhst81emboee4nue5qnp/1487692800000/13305965733609396212/*/0B1Iw4oNXJh2AVm1hdC1jekcxa0E?e=download'
+    } else if(dataset.equals("amazon-baby")){
+        ext.dataDir = "data/amazon-baby/"
+        ext.zipFile = "data/ratings_Baby.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
+    } else if(dataset.equals("amazon-patio-lawn-garden")){
+        ext.dataDir = "data/amazon-patio-lawn-garden/"
+        ext.zipFile = "data/ratings_Patio_Lawn_and_Garden.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AdW5wbE5oUDNmVEE&export=download'
+    } else if(dataset.equals("amazon-pet-supplies")){
+        ext.dataDir = "data/amazon-pet-supplies/"
+        ext.zipFile = "data/ratings_Pet_Supplies.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AZXhneXNzdTVNWUE&export=download'
+    } else if(dataset.equals("amazon-office-products")){
+        ext.dataDir = "data/amazon-office-products/"
+        ext.zipFile = "data/amazon_Office_Products.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AQ0NCTmtQSFhSR3c&export=download'
+    } else if(dataset.equals("amazon-grocery-gourmet-food")){
+        ext.dataDir = "data/amazon-grocery-gourmet-food/"
+        ext.zipFile = "data/amazon_Grocery_and_Gourmet_Food.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AVTRhelpDNHBYWk0&export=download'
+    } else if(dataset.equals("amazon-video-games")){
+        ext.dataDir = "data/amazon-video-games/"
+        ext.zipFile = "data/amazon_Video_Games.zip"
+
+        include_name = '*'
+        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2ATWFCYWdfRVNJNFU&export=download'
     }
 
     outputs.dir dataDir
@@ -134,6 +188,24 @@ task crossfold(type: Crossfold, group: 'evaluate') {
         input 'data/bookcrossings.yml'
     } else if (dataset.equals("jester")) {
         input 'data/jester.yml'
+    } else if (dataset.equals("amazon-musical-instruments")) {
+        input 'data/amazon-musical-instruments.yml'
+    } else if (dataset.equals("amazon-instant-video")) {
+        input 'data/amazon-instant-video.yml'
+    } else if (dataset.equals("amazon-digital-music")) {
+        input 'data/amazon-digital-music.yml'
+    } else if (dataset.equals("amazon-baby")) {
+        input 'data/amazon-baby.yml'
+    } else if (dataset.equals("amazon-patio-lawn-garden")) {
+        input 'data/amazon-patio-lawn-garden.yml'
+    } else if (dataset.equals("amazon-pet-supplies")) {
+        input 'data/amazon-pet-supplies.yml'
+    } else if (dataset.equals("amazon-office-products")) {
+        input 'data/amazon-office-products.yml'
+    } else if (dataset.equals("amazon-grocery-gourmet-food")) {
+        input 'data/amazon-grocery-gourmet-food.yml'
+    } else if (dataset.equals("amazon-video-games")) {
+        input 'data/amazon-video-games.yml'
     }
     // test on random 1/5 of each user's ratings
     holdoutFraction(0.2, 'random')
@@ -204,6 +276,7 @@ task evaluateOutputs {
         }
     }
 }
+
 
 task analyzeResults(type: Exec, group: 'evaluate') {
     description 'Post-processes evaluation results to draw charts.'
