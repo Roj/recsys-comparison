@@ -102,7 +102,7 @@ task evaluateAmazonMusicalInstruments(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanAmazonMusicalInstruments {
+task cleanDataAmazonMusicalInstruments {
     doLast {
         delete zipFile
         delete dataDir

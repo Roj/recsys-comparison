@@ -37,11 +37,15 @@ dependencies {
 
 import org.lenskit.gradle.*
 
+def dataDir = "data/lastfm-2k/"
+def zipFile = "data/lastfm-2k.zip"
+
 /* Download the MovieLens data set */
 task fetchDataLastfm {
     description 'Fetches the Lastfm data set.'
-    ext.dataDir = "data/lastfm-2k/"
-    ext.zipFile = "data/lastfm-2k.zip"
+
+    outputs.dir dataDir
+    outputs.file zipFile
 
     doLast {
         mkdir dataDir
@@ -87,7 +91,9 @@ task evaluateLastfm(type: TrainTest, group: 'evaluate') {
     // configure our algorithms
     algorithm 'PersMean', 'algorithms/pers-mean.groovy'
     algorithm 'ItemItem', 'algorithms/item-item.groovy'
-    algorithm 'Custom', 'algorithms/custom.groovy'
+    algorithm 'UserUser', 'algorithms/user-user.groovy'
+    algorithm 'FunkSVD', 'algorithms/funksvd.groovy'
+
 
     // and some evaluation tasks and metrics
     predict {
@@ -100,9 +106,9 @@ task evaluateLastfm(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanLastfm {
+task cleanDataLastfm {
     doLast {
-        delete "data/lastfm-2k/"
-        delete "data/lastfm-2k.zip"
+        delete dataDir
+        delete zipFile
     }
 }

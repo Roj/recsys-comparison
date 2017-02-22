@@ -103,7 +103,7 @@ task evaluateAmazonVideoGames(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanAmazonVideoGames {
+task cleanDataAmazonVideoGames {
     doLast {
         delete zipFile
         delete dataDir

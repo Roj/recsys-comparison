@@ -101,7 +101,7 @@ task evaluateJester(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanJester {
+task cleanDataJester {
     doLast {
         delete "data/jester/"
         delete "data/jester.zip"

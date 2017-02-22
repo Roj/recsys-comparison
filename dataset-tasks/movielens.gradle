@@ -37,11 +37,13 @@ dependencies {
 
 import org.lenskit.gradle.*
 
+def dataset = 'movielens'
+def dataDir = "data/ml-100k"
+def zipFile = "data/ml-100k.zip"
+
 /* Download the data set */
 task fetchDataMovieLens {
     description 'Fetches the MovieLens data set.'
-    ext.dataDir = "data/ml-100k"
-    ext.zipFile = "data/ml-100k.zip"
 
     outputs.dir dataDir
     outputs.file zipFile
@@ -49,7 +51,7 @@ task fetchDataMovieLens {
     doLast {
         mkdir dataDir
         ant {
-            get(src: 'https://files.grouplens.org/papers/ml-100k.zip',
+            get(src: 'http://files.grouplens.org/papers/ml-100k.zip',
                     dest: zipFile,
                     skipExisting: true)
             unzip(src: zipFile, dest: dataDir) {
@@ -62,7 +64,7 @@ task fetchDataMovieLens {
     }
 }
 
-task crossfoldMovieLens(type: Crossfold, group: 'evaluate') {
+task crossfoldMovielens(type: Crossfold, group: 'evaluate') {
     // download data before evaluating
     dependsOn fetchDataMovieLens
 
@@ -79,8 +81,11 @@ task evaluateMovielens(type: TrainTest, group: 'evaluate') {
     logFile "$buildDir/evaluate.log"
     logFileLevel 'DEBUG'
 
+    // we add our crossfold task as evaluation input
+    dataSet crossfoldMovielens
+
     // send the output to appropriate files
-    def datasetResultFolder = "$buildDir/results/movielens"
+    def datasetResultFolder = "$buildDir/results/"+dataset
     outputFile datasetResultFolder+"/eval-results.csv"
     userOutputFile datasetResultFolder+"/eval-users.csv"
 
@@ -101,8 +106,9 @@ task evaluateMovielens(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanDataMovielens {
+task cleanDataMovielens (group: 'clean')  {
     doLast {
-        delete "data/ml-100k" "data/ml-100k.zip"
+        delete dataDir
+        delete zipFile
     }
 }

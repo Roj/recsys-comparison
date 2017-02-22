@@ -103,7 +103,7 @@ task evaluateBookcrossings(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanBookcrossings{
+task cleanDataBookcrossings{
     doLast {
         delete dataDir
         delete zipFile
