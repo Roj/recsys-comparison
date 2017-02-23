@@ -23,7 +23,7 @@ for i in range(len(matrix)):
 	for j in range(len(matrix[i])):
 		if j==0: continue
 		if matrix[i][j]!=99:
-			new_list.append([i,j,convert(matrix[i][j])])
+			new_list.append([i,j,matrix[i][j]])
 
 last_user = i + 1
 data = get_data("jester-data-2.xls")
@@ -33,7 +33,7 @@ for i in range(len(matrix)):
 	for j in range(len(matrix[i])):
 		if j==0: continue
 		if matrix[i][j]!=99:
-			new_list.append([i+last_user,j,convert(matrix[i][j])])
+			new_list.append([i+last_user,j,matrix[i][j]])
 
 last_user = last_user + i + 1
 data = get_data("jester-data-3.xls")
@@ -43,7 +43,7 @@ for i in range(len(matrix)):
 	for j in range(len(matrix[i])):
 		if j==0: continue
 		if matrix[i][j]!=99:
-			new_list.append([i+last_user,j,convert(matrix[i][j])])
+			new_list.append([i+last_user,j,matrix[i][j]])
 
 
 with open('jester.tsv','w') as file:
