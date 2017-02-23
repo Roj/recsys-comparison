@@ -75,7 +75,7 @@ task evaluateAll(type: TrainTest, group: 'evaluate') {
     dependsOn 'evaluateAmazonInstantVideo'
     dependsOn 'evaluateAmazonVideoGames'
     dependsOn 'evaluateAmazonBaby'
-    dependsOn 'evaluateAmazonDigitalMusic'
+//    dependsOn 'evaluateAmazonDigitalMusic'
     dependsOn 'evaluateAmazonGroceryGourmetFood'
     dependsOn 'evaluateAmazonOfficeProducts'
     dependsOn 'evaluateAmazonPatioLawnGarden'
