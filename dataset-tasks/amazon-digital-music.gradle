@@ -48,7 +48,7 @@ task fetchDataAmazonDigitalMusic {
     doLast {
         mkdir dataDir
         ant {
-            get(src: 'https://doc-0g-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/78osragsd6ttfhst81emboee4nue5qnp/1487692800000/13305965733609396212/*/0B1Iw4oNXJh2AVm1hdC1jekcxa0E?e=download',
+            get(src: 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AVm1hdC1jekcxa0E',
                     dest: zipFile,
                     skipExisting: true)
             unzip(src: zipFile, dest: dataDir) {
