@@ -11,12 +11,6 @@ matrix = data["jester-data-1-new"]
 new_list = []
 
 
-def convert(rating):
-	old_min = -10.0
-	old_max = 10.0
-	new_min = 1.0
-	new_max = 5.0
-	return (((rating - old_min) * (new_max - new_min)) / (old_max - old_min)) + new_min
 
 
 for i in range(len(matrix)):

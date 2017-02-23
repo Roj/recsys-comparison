@@ -2,22 +2,6 @@
 /* Set up the repositories to get the LensKit plugin.
  * This configuration pulls in things needed for the build.gradle script itself */
 
-
-//Choose dataset:
-//one of: movielens lastfm bookcrossings jester
-// or use -Pdataset=[dataset]
-def dataset
-def datasetResultFolder = "$buildDir/results/"+dataset
-
-task setDataset {
-    if (project.hasProperty('dataset')) {
-        dataset = project.dataset
-    } else {
-        dataset = "movielens"
-    }
-    datasetResultFolder = "$buildDir/results/"+dataset
-}
-
 buildscript {
     repositories {
         // LensKit snapshots are published to the Sonatype snapshot repository
@@ -67,238 +51,52 @@ lenskit {
 }
 
 import org.lenskit.gradle.*
+apply from: 'dataset-tasks/movielens.gradle'
+apply from: 'dataset-tasks/lastfm.gradle'
+apply from: 'dataset-tasks/jester.gradle'
+apply from: 'dataset-tasks/bookcrossings.gradle'
+apply from: 'dataset-tasks/amazon-musical-instruments.gradle'
+apply from: 'dataset-tasks/amazon-instant-video.gradle'
+apply from: 'dataset-tasks/amazon-video-games.gradle'
+apply from: 'dataset-tasks/amazon-baby.gradle'
+apply from: 'dataset-tasks/amazon-grocery-gourmet-food.gradle'
+apply from: 'dataset-tasks/amazon-office-products.gradle'
+apply from: 'dataset-tasks/amazon-digital-music.gradle'
+apply from: 'dataset-tasks/amazon-patio-lawn-garden.gradle'
+apply from: 'dataset-tasks/amazon-pet-supplies.gradle'
 
-/* Download the corresponding data set */
-task fetchData {
-    dependsOn setDataset
-    description 'Fetches the corresponding data set. '+ dataset
-
-    //Define the variables for the dataset
-    def include_name
-    def url_src
-
-    if(dataset.equals("movielens")) {
-        ext.dataDir = "data/ml-100k"
-        ext.zipFile = "data/ml-100k.zip"
-    
-        include_name = 'ml-100k/*'
-        url_src = 'http://files.grouplens.org/papers/ml-100k.zip'
-    } else if(dataset.equals("lastfm")) {
-        ext.dataDir = "data/lastfm-2k/"
-        ext.zipFile = "data/lastfm-2k.zip"
-    
-        include_name = '*'
-        url_src = 'http://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip'
-    } else if(dataset.equals("bookcrossings")) {
-        ext.dataDir = "data/bookcrossings/"
-        ext.zipFile = "data/bookcrossings.zip"
-    
-        include_name = '*'
-        url_src = 'http://drive.google.com/uc?export=download&id=0B2lSBow_51i-X25lSlNsS09wRTQ'
-    } else if(dataset.equals("jester")){
-        ext.dataDir = "data/jester/"
-        ext.zipFile = "data/jester.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AWTQ1SG1lUmUxd1E&export=download'
-    } else if(dataset.equals("amazon-musical-instruments")){
-        ext.dataDir = "data/amazon-musical-instruments/"
-        ext.zipFile = "data/ratings_Musical_Instruments.zip"
-
-        include_name = '*'
-        url_src = 'https://doc-0s-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/ciltrn27fjgb06k3pi117m8psgpf2m1o/1487692800000/13305965733609396212/*/0B1Iw4oNXJh2AUDdYTDBMTHFDQk0?e=download'
-    } else if(dataset.equals("amazon-instant-video")){
-        ext.dataDir = "data/amazon-instant-video/"
-        ext.zipFile = "data/ratings_Amazon_Instant_Video.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AR2ppUTZwNUJhcFU&export=download'
-    } else if(dataset.equals("amazon-digital-music")){
-        ext.dataDir = "data/amazon-digital-music/"
-        ext.zipFile = "data/ratings_Digital_Music.zip"
-
-        include_name = '*'
-        url_src = 'https://doc-0g-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/78osragsd6ttfhst81emboee4nue5qnp/1487692800000/13305965733609396212/*/0B1Iw4oNXJh2AVm1hdC1jekcxa0E?e=download'
-    } else if(dataset.equals("amazon-baby")){
-        ext.dataDir = "data/amazon-baby/"
-        ext.zipFile = "data/ratings_Baby.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
-    } else if(dataset.equals("amazon-patio-lawn-garden")){
-        ext.dataDir = "data/amazon-patio-lawn-garden/"
-        ext.zipFile = "data/ratings_Patio_Lawn_and_Garden.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AdW5wbE5oUDNmVEE&export=download'
-    } else if(dataset.equals("amazon-pet-supplies")){
-        ext.dataDir = "data/amazon-pet-supplies/"
-        ext.zipFile = "data/ratings_Pet_Supplies.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AZXhneXNzdTVNWUE&export=download'
-    } else if(dataset.equals("amazon-office-products")){
-        ext.dataDir = "data/amazon-office-products/"
-        ext.zipFile = "data/amazon_Office_Products.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AQ0NCTmtQSFhSR3c&export=download'
-    } else if(dataset.equals("amazon-grocery-gourmet-food")){
-        ext.dataDir = "data/amazon-grocery-gourmet-food/"
-        ext.zipFile = "data/amazon_Grocery_and_Gourmet_Food.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AVTRhelpDNHBYWk0&export=download'
-    } else if(dataset.equals("amazon-video-games")){
-        ext.dataDir = "data/amazon-video-games/"
-        ext.zipFile = "data/amazon_Video_Games.zip"
-
-        include_name = '*'
-        url_src = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2ATWFCYWdfRVNJNFU&export=download'
-    }
-
-    outputs.dir dataDir
-    outputs.file zipFile
-    doLast {
-        mkdir dataDir
-        ant {
-            get(src: url_src,
-                dest: zipFile,
-                skipExisting: true)
-            unzip(src: zipFile, dest: dataDir) {
-                patternset {
-                    include name: include_name 
-                }
-                mapper type: 'flatten'
-            }
-        }
-    }
-}
-
-task crossfold(type: Crossfold, group: 'evaluate') {
-    // download data before evaluating
-    dependsOn fetchData
-    println 'Dataset '+dataset
-
-    if(dataset.equals("movielens")) {
-        input 'data/ml-100k.yml'
-    } else if(dataset.equals("lastfm")) {
-        input 'data/lastfm-2k.yml'
-    } else if(dataset.equals("bookcrossings")) {
-        input 'data/bookcrossings.yml'
-    } else if (dataset.equals("jester")) {
-        input 'data/jester.yml'
-    } else if (dataset.equals("amazon-musical-instruments")) {
-        input 'data/amazon-musical-instruments.yml'
-    } else if (dataset.equals("amazon-instant-video")) {
-        input 'data/amazon-instant-video.yml'
-    } else if (dataset.equals("amazon-digital-music")) {
-        input 'data/amazon-digital-music.yml'
-    } else if (dataset.equals("amazon-baby")) {
-        input 'data/amazon-baby.yml'
-    } else if (dataset.equals("amazon-patio-lawn-garden")) {
-        input 'data/amazon-patio-lawn-garden.yml'
-    } else if (dataset.equals("amazon-pet-supplies")) {
-        input 'data/amazon-pet-supplies.yml'
-    } else if (dataset.equals("amazon-office-products")) {
-        input 'data/amazon-office-products.yml'
-    } else if (dataset.equals("amazon-grocery-gourmet-food")) {
-        input 'data/amazon-grocery-gourmet-food.yml'
-    } else if (dataset.equals("amazon-video-games")) {
-        input 'data/amazon-video-games.yml'
-    }
-    // test on random 1/5 of each user's ratings
-    holdoutFraction(0.2, 'random')
-    // use 5-fold cross-validation
-    partitionCount 5
-
-    outputDir "$buildDir/crossfold/"+dataset
-}
-
-task getCrossfoldData {
-    doLast {
-        description 'Copy to use in analyze'
-        delete "$buildDir/crossfold.out"
-        copy {
-            from "$buildDir/crossfold/"+dataset
-            into "$buildDir/crossfold.out"
-        }
-    }
+/* Run the LensKit evaluation */
+task evaluateAll(type: TrainTest, group: 'evaluate') {
+    dependsOn 'evaluateMovielens'
+    dependsOn 'evaluateLastfm'
+//    dependsOn 'evaluateJester'
+//    dependsOn 'evaluateBookcrossings'
+    dependsOn 'evaluateAmazonMusicalInstruments'
+    dependsOn 'evaluateAmazonInstantVideo'
+    dependsOn 'evaluateAmazonVideoGames'
+    dependsOn 'evaluateAmazonBaby'
+//    dependsOn 'evaluateAmazonDigitalMusic'
+    dependsOn 'evaluateAmazonGroceryGourmetFood'
+    dependsOn 'evaluateAmazonOfficeProducts'
+    dependsOn 'evaluateAmazonPatioLawnGarden'
+    dependsOn 'evaluateAmazonPetSupplies'
 }
 
 /* Run the LensKit evaluation */
-task evaluate(type: TrainTest, group: 'evaluate') {
-    description 'Runs the LensKit evaluation.'
-    logFile "$buildDir/evaluate.log"
-    logFileLevel 'DEBUG'
-
-    // we add our crossfold task as evaluation input
-//    dataSet "$buildDir/crossfold/"+dataset+"/datasets.yaml"
-//    dataSet crossfold
-    dependsOn getCrossfoldData
-    dataSet crossfold
-
-    // send the output to appropriate files
-
-    outputFile datasetResultFolder+"/eval-results.csv"
-    userOutputFile datasetResultFolder+"/eval-users.csv"
-
-    // configure our algorithms
-    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
-    algorithm 'ItemItem', 'algorithms/item-item.groovy'
-    algorithm 'Custom', 'algorithms/custom.groovy'
-	algorithm 'UserUser', 'algorithms/user-user.groovy'
-	algorithm 'FunkSVD', 'algorithms/funksvd.groovy'
-
-    // and some evaluation tasks and metrics
-    predict {
-        metric 'rmse'
-        metric 'ndcg'
-    }
-    recommend {
-        listSize 10
-        metric 'mrr'
-    }
-}
-
-task evaluateOutputs {
-    dependsOn evaluate
-
-    doLast{
-        description 'Copy to use in analyze'
-        copy {
-            from datasetResultFolder+"/eval-results.csv"
-            into "$buildDir"
-        }
-        copy {
-            from datasetResultFolder+"/eval-users.csv"
-            into "$buildDir"
-        }
-    }
-}
-
-
-task analyzeResults(type: Exec, group: 'evaluate') {
-    description 'Post-processes evaluation results to draw charts.'
-    dependsOn evaluateOutputs
-
-    inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
-    outputs.file datasetResultFolder+"/analysis.html"
-
-    /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
-    if (project.hasProperty('ipython.bin')) {
-        executable project.getProperty('ipython.bin')
-    } else {
-        executable 'jupyter'
-    }
-    args 'nbconvert', '--to', 'html', '--execute'
-    args '--output', file(datasetResultFolder+"/analysis.html")
-    args file("analyze-output.ipynb")
-
-    doLast {
-        delete "$buildDir/eval-results.csv"
-        delete "$buildDir/eval-users.csv"
-    }
+task cleanAllData {
+    dependsOn 'cleanDataMovielens'
+    dependsOn 'cleanDataLastfm'
+    dependsOn 'cleanDataJester'
+    dependsOn 'cleanDataBookcrossings'
+    dependsOn 'cleanDataAmazonMusicalInstruments'
+    dependsOn 'cleanDataAmazonInstantVideo'
+    dependsOn 'cleanDataAmazonVideoGames'
+    dependsOn 'cleanDataAmazonBaby'
+    dependsOn 'cleanDataAmazonDigitalMusic'
+    dependsOn 'cleanDataAmazonGroceryGourmetFood'
+    dependsOn 'cleanDataAmazonOfficeProducts'
+    dependsOn 'cleanDataAmazonPatioLawnGarden'
+    dependsOn 'cleanDataAmazonPetSupplies'
 }
 
 task analyzeAllResults(type: Exec, group: 'evaluate') {
@@ -316,10 +114,4 @@ task analyzeAllResults(type: Exec, group: 'evaluate') {
     args 'nbconvert', '--to', 'html', '--execute'
     args '--output', file("data-analysis/analysis.html")
     args file("analyze-output.ipynb")
-}
-
-task cleanData {
-    doLast {
-        delete 'data'
-    }
 }
