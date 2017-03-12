@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-books/ratings_Books.csv
+  format: csv
+  header: false
+  entity_type: rating

@@ -64,6 +64,7 @@ apply from: 'dataset-tasks/amazon-office-products.gradle'
 apply from: 'dataset-tasks/amazon-digital-music.gradle'
 apply from: 'dataset-tasks/amazon-patio-lawn-garden.gradle'
 apply from: 'dataset-tasks/amazon-pet-supplies.gradle'
+apply from: 'dataset-tasks/amazon-books.gradle'
 
 /* Run the LensKit evaluation */
 task evaluateAll(type: TrainTest, group: 'evaluate') {
@@ -80,6 +81,7 @@ task evaluateAll(type: TrainTest, group: 'evaluate') {
     dependsOn 'evaluateAmazonOfficeProducts'
     dependsOn 'evaluateAmazonPatioLawnGarden'
     dependsOn 'evaluateAmazonPetSupplies'
+    dependsOn 'evaluateAmazonBooks'    
 }
 
 /* Run the LensKit evaluation */
@@ -97,6 +99,7 @@ task cleanAllData {
     dependsOn 'cleanDataAmazonOfficeProducts'
     dependsOn 'cleanDataAmazonPatioLawnGarden'
     dependsOn 'cleanDataAmazonPetSupplies'
+    dependsOn 'cleanDataAmazonBooks'
 }
 
 task analyzeAllResults(type: Exec, group: 'evaluate') {

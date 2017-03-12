@@ -39,7 +39,7 @@ import org.lenskit.gradle.*
 
 def dataset = 'bookcrossings'
 def dataDir = 'data/'+dataset
-def zipFile = "data/amazon_Video_Games.zip"
+def zipFile = "data/bookcrossings.zip"
 
 /* Download the data set */
 task fetchDataBookcrossings {
