@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-toys-games/ratings_Toys_and_Games.csv
+  format: csv
+  header: false
+  entity_type: rating

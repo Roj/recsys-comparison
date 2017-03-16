@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-tools-home-improvement/ratings_Tools_and_Home_Improvement.csv
+  format: csv
+  header: false
+  entity_type: rating

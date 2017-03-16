@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-android-apps/ratings_Apps_for_Android.csv
+  format: csv
+  header: false
+  entity_type: rating
