@@ -30,7 +30,9 @@ You can later concatenate the CSVs to compare the performance of the hyperparame
 
 ### Hyperparameter tuning
 
-In a later version we'll add a python or bash script that automates the sweeps for various algorithms for all datasets.
+`sweep_hyperparameters.py` is a python-3.4 script that runs the above code automatically, in random values from predefined ranges, for each hyperparameter, for each algorithm, for each data set (many times).You can set `DEBUG=True` to only see the commands it would run, turning it off will make it actually run them. You can configure more datasets, more iterations, and customize the ranges for each hyperparameter.   
+
+For now we are not running the same hyperparameters for each dataset, each instance is being randomly sampled. This may change in future versions.
 
 ### Properties
 Depending on the size of the dataset and your computer's capacity, you may wish to specify properties such as the maximum heap space available for the Java Virtual Machine or the threads to use during execution. A common `gradle.properties` for this is as follows:
