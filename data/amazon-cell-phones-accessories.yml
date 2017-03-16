@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-cell-phones-accessories/ratings_Cell_Phones_and_Accessories.csv
+  format: csv
+  header: false
+  entity_type: rating

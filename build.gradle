@@ -71,6 +71,14 @@ apply from: 'dataset-tasks/amazon-beauty.gradle'
 apply from: 'dataset-tasks/amazon-health-personal-care.gradle'
 apply from: 'dataset-tasks/amazon-tools-home-improvement.gradle'
 apply from: 'dataset-tasks/amazon-toys-games.gradle'
+apply from: 'dataset-tasks/amazon-CDs-vinyl.gradle'
+apply from: 'dataset-tasks/amazon-cell-phones-accessories.gradle'
+apply from: 'dataset-tasks/amazon-clothing-shoes-jewelry.gradle'
+apply from: 'dataset-tasks/amazon-electronics.gradle'
+apply from: 'dataset-tasks/amazon-home-kitchen.gradle'
+apply from: 'dataset-tasks/amazon-kindle-store.gradle'
+apply from: 'dataset-tasks/amazon-movies-TV.gradle'
+apply from: 'dataset-tasks/amazon-sports-outdoors.gradle'
 
 /* Run the LensKit evaluation */
 task evaluateAll(type: TrainTest, group: 'evaluate') {
@@ -94,6 +102,14 @@ task evaluateAll(type: TrainTest, group: 'evaluate') {
     dependsOn 'evaluateAmazonHealthAndPersonalCare'
     dependsOn 'evaluateAmazonToolsAndHomeImprovement'
     dependsOn 'evaluateAmazonToysAndGames'
+    dependsOn 'evaluateAmazonCDsAndVinyl'
+    dependsOn 'evaluateAmazonCellPhonesAndAccessories'
+    dependsOn 'evaluateAmazonClothingShoesAndJewelry'
+    dependsOn 'evaluateAmazonElectronics'
+    dependsOn 'evaluateAmazonHomeAndKitchen'
+    dependsOn 'evaluateAmazonKindleStore'
+    dependsOn 'evaluateAmazonMoviesAndTV'
+    dependsOn 'evaluateAmazonSportsAndOutdoors'
 }
 
 /* Run the LensKit evaluation */
@@ -118,6 +134,14 @@ task cleanAllData {
     dependsOn 'cleanDataAmazonHealthAndPersonalCare'
     dependsOn 'cleanDataAmazonToolsAndHomeImprovement'
     dependsOn 'cleanDataAmazonToysAndGames'
+    dependsOn 'cleanDataAmazonCDsAndVinyl'
+    dependsOn 'cleanDataAmazonCellPhonesAndAccessories'
+    dependsOn 'cleanDataAmazonClothingShoesAndJewelry'
+    dependsOn 'cleanDataAmazonElectronics'
+    dependsOn 'cleanDataAmazonHomeAndKitchen'
+    dependsOn 'cleanDataAmazonKindleStore'
+    dependsOn 'cleanDataAmazonMoviesAndTV'
+    dependsOn 'cleanDataAmazonSportsAndOutdoors'
 }
 
 task analyzeAllResults(type: Exec, group: 'evaluate') {

@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-sports-outdoors/ratings_Sports_and_Outdoors.csv
+  format: csv
+  header: false
+  entity_type: rating

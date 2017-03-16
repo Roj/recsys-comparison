@@ -1,0 +1,111 @@
+/* This file may be freely modified, used, and redistributed without restriction. */
+/* Set up the repositories to get the LensKit plugin.
+ * This configuration pulls in things needed for the build.gradle script itself */
+buildscript {
+    repositories {
+        // LensKit snapshots are published to the Sonatype snapshot repository
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        // LensKit releases are published to Maven Central
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.lenskit:lenskit-gradle:3.0-M2'
+    }
+}
+
+/* Set up the repositories for getting LensKit and other libraries.
+ * These repositories are used for your Java or Groovy code, and for running LensKit.
+ */
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    // Code needs to build with LensKit.
+    compile "org.lenskit:lenskit-all:3.0-M2"
+    // To run the code, we also need the LensKit CLI.
+    runtime "org.lenskit:lenskit-cli:3.0-M2"
+
+    // Tests use JUnit
+    testCompile "junit:junit:4.12"
+}
+
+import org.lenskit.gradle.*
+
+def dataset = 'amazon-cell-phones-accessories'
+def dataDir = 'data/'+dataset
+def zipFile = "data/ratings_Cell_Phones_and_Accessories.zip"
+
+/* Download the data set */
+task fetchDataAmazonCellPhonesAndAccessories {
+    description 'Fetches the Amazon Cell Phones and Accessories data set.'
+
+    doLast {
+        mkdir dataDir
+        ant {
+            get(src: 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AQUEwbGNmWkYtMEU',
+                    dest: zipFile,
+                    skipExisting: true)
+            unzip(src: zipFile, dest: dataDir) {
+                patternset {
+                    include name: '*'
+                }
+                mapper type: 'flatten'
+            }
+        }
+    }
+}
+
+task crossfoldAmazonCellPhonesAndAccessories(type: Crossfold, group: 'evaluate') {
+    // download data before evaluating
+    dependsOn fetchDataAmazonCellPhonesAndAccessories
+
+    input 'data/amazon-cell-phones-accessories.yml'
+    // test on random 1/5 of each user's ratings
+    holdoutFraction(0.2, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+}
+
+/* Run the LensKit evaluation */
+task evaluateAmazonCellPhonesAndAccessories(type: TrainTest, group: 'evaluate') {
+    description 'Runs the Amazon Cell Phones and Accessories evaluation.'
+    logFile "$buildDir/evaluate.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dataSet crossfoldAmazonCellPhonesAndAccessories
+
+    // send the output to appropriate files
+    def datasetResultFolder = "$buildDir/results/"+dataset
+    outputFile datasetResultFolder+"/eval-results.csv"
+    userOutputFile datasetResultFolder+"/eval-users.csv"
+
+    // configure our algorithms
+    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
+    algorithm 'ItemItem', 'algorithms/item-item.groovy'
+    algorithm 'UserUser', 'algorithms/user-user.groovy'
+    algorithm 'FunkSVD', 'algorithms/funksvd.groovy'
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+        metric 'ndcg'
+    }
+    recommend {
+        listSize 10
+        metric 'mrr'
+    }
+}
+
+task cleanDataAmazonCellPhonesAndAccessories {
+    doLast {
+        delete zipFile
+        delete dataDir
+    }
+}

@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-home-kitchen/ratings_Home_and_Kitchen.csv
+  format: csv
+  header: false
+  entity_type: rating
