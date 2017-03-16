@@ -35,30 +35,20 @@ dependencies {
     testCompile "junit:junit:4.12"
 }
 
-lenskit {
-    // you can configure the threadCount and maxMemory here, or on the command line
-    if (project.hasProperty('lenskitMaxMemory')) {
-        maxMemory lenskitMaxMemory
-    }
-    if (project.hasProperty('lenskitThreadCount')) {
-        threadCount = lenskitThreadCount.toInteger()
-    }
-}
-
 import org.lenskit.gradle.*
 
-def dataset = 'bookcrossings'
+def dataset = 'amazon-toys-games'
 def dataDir = 'data/'+dataset
-def zipFile = "data/bookcrossings.zip"
+def zipFile = "data/ratings_Toys_and_Games.zip"
 
 /* Download the data set */
-task fetchDataBookcrossings {
-    description 'Fetches the Bookcrossing data set.'
+task fetchDataAmazonToysAndGames {
+    description 'Fetches the Amazon Toys and Games data set.'
 
     doLast {
         mkdir dataDir
         ant {
-            get(src: 'http://drive.google.com/uc?export=download&id=0B2lSBow_51i-X25lSlNsS09wRTQ',
+            get(src: 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download',
                     dest: zipFile,
                     skipExisting: true)
             unzip(src: zipFile, dest: dataDir) {
@@ -71,11 +61,11 @@ task fetchDataBookcrossings {
     }
 }
 
-task crossfoldBookcrossings(type: Crossfold, group: 'evaluate') {
+task crossfoldAmazonToysAndGames(type: Crossfold, group: 'evaluate') {
     // download data before evaluating
-    dependsOn fetchDataBookcrossings
+    dependsOn fetchDataAmazonToysAndGames
 
-    input 'data/bookcrossings.yml'
+    input 'data/amazon-toys-games.yml'
     // test on random 1/5 of each user's ratings
     holdoutFraction(0.2, 'random')
     // use 5-fold cross-validation
@@ -83,16 +73,16 @@ task crossfoldBookcrossings(type: Crossfold, group: 'evaluate') {
 }
 
 /* Run the LensKit evaluation */
-task evaluateBookcrossings(type: TrainTest, group: 'evaluate') {
-    description 'Runs the LensKit evaluation.'
+task evaluateAmazonToysAndGames(type: TrainTest, group: 'evaluate') {
+    description 'Runs the Amazon Toys and Games evaluation.'
     logFile "$buildDir/evaluate.log"
     logFileLevel 'DEBUG'
 
     // we add our crossfold task as evaluation input
-    dataSet crossfoldBookcrossings
+    dataSet crossfoldAmazonToysAndGames
 
     // send the output to appropriate files
-    def datasetResultFolder = "$buildDir/results/bookcrossings"
+    def datasetResultFolder = "$buildDir/results/"+dataset
     outputFile datasetResultFolder+"/eval-results.csv"
     userOutputFile datasetResultFolder+"/eval-users.csv"
 
@@ -113,9 +103,9 @@ task evaluateBookcrossings(type: TrainTest, group: 'evaluate') {
     }
 }
 
-task cleanDataBookcrossings{
+task cleanDataAmazonToysAndGames {
     doLast {
-        delete dataDir
         delete zipFile
+        delete dataDir
     }
 }

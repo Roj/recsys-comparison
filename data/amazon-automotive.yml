@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-automotive/ratings_Automotive.csv
+  format: csv
+  header: false
+  entity_type: rating

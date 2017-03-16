@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-health-personal-care/ratings_Health_and_Personal_Care.csv
+  format: csv
+  header: false
+  entity_type: rating
