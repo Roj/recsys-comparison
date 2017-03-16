@@ -15,10 +15,10 @@ buildscript {
         classpath 'org.lenskit:lenskit-gradle:3.0-M2'
     }
 }
-
 apply plugin: 'java' // if you use Groovy or Scala, add those plugins
 apply plugin: 'lenskit'
 
+import org.lenskit.gradle.*
 /* Set up the repositories for getting LensKit and other libraries.
  * These repositories are used for your Java or Groovy code, and for running LensKit.
  */
@@ -50,74 +50,204 @@ lenskit {
     }
 }
 
-import org.lenskit.gradle.*
-apply from: 'dataset-tasks/movielens.gradle'
-apply from: 'dataset-tasks/lastfm.gradle'
-apply from: 'dataset-tasks/jester.gradle'
-apply from: 'dataset-tasks/bookcrossings.gradle'
-apply from: 'dataset-tasks/amazon-musical-instruments.gradle'
-apply from: 'dataset-tasks/amazon-instant-video.gradle'
-apply from: 'dataset-tasks/amazon-video-games.gradle'
-apply from: 'dataset-tasks/amazon-baby.gradle'
-apply from: 'dataset-tasks/amazon-grocery-gourmet-food.gradle'
-apply from: 'dataset-tasks/amazon-office-products.gradle'
-apply from: 'dataset-tasks/amazon-digital-music.gradle'
-apply from: 'dataset-tasks/amazon-patio-lawn-garden.gradle'
-apply from: 'dataset-tasks/amazon-pet-supplies.gradle'
-apply from: 'dataset-tasks/amazon-books.gradle'
-apply from: 'dataset-tasks/amazon-automotive.gradle'
-apply from: 'dataset-tasks/amazon-android-apps.gradle'
-apply from: 'dataset-tasks/amazon-beauty.gradle'
-apply from: 'dataset-tasks/amazon-health-personal-care.gradle'
-apply from: 'dataset-tasks/amazon-tools-home-improvement.gradle'
-apply from: 'dataset-tasks/amazon-toys-games.gradle'
+/*Configure dataset values*/
 
-/* Run the LensKit evaluation */
-task evaluateAll(type: TrainTest, group: 'evaluate') {
-    dependsOn 'evaluateMovielens'
-    dependsOn 'evaluateLastfm'
-//    dependsOn 'evaluateJester'
-//    dependsOn 'evaluateBookcrossings'
-    dependsOn 'evaluateAmazonMusicalInstruments'
-    dependsOn 'evaluateAmazonInstantVideo'
-    dependsOn 'evaluateAmazonVideoGames'
-    dependsOn 'evaluateAmazonBaby'
-//    dependsOn 'evaluateAmazonDigitalMusic'
-    dependsOn 'evaluateAmazonGroceryGourmetFood'
-    dependsOn 'evaluateAmazonOfficeProducts'
-    dependsOn 'evaluateAmazonPatioLawnGarden'
-    dependsOn 'evaluateAmazonPetSupplies'
-    dependsOn 'evaluateAmazonBooks'
-    dependsOn 'evaluateAmazonAutomotive'
-    dependsOn 'evaluateAmazonAndroidApps'
-    dependsOn 'evaluateAmazonBeauty'
-    dependsOn 'evaluateAmazonHealthAndPersonalCare'
-    dependsOn 'evaluateAmazonToolsAndHomeImprovement'
-    dependsOn 'evaluateAmazonToysAndGames'
+def dataset = (project.hasProperty("dataset"))? dataset : "ml-100k"
+def dataDir = 'data/'+dataset
+def zipFile = ""
+def url = ""
+def pattern = "*"
+def yml = "data/"+dataset+".yml"
+def datasetResultFolder = "$buildDir/results/"+dataset;
+
+//I couldn't find a switch in groovy/gradle. 
+if(dataset.equals('amazon-android-apps')) {
+    zipFile = "data/ratings_Apps_for_Android.zip"
+    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
+    yml = data/amazon-android-apps.yml
+} else if(dataset.equals( 'amazon-automotive')) {
+    zipFile = "data/ratings_Automotive.zip"
+    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
+} else if(dataset.equals('amazon-baby')) {
+    zipFile = "data/ratings_Baby.zip"
+    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
+} else if(dataset.equals('amazon-beauty')) {
+    zipFile = "data/ratings_Beauty.zip"
+    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
+} else if(dataset.equals( 'amazon-books')) {
+    zipFile = "data/ratings_Books.zip"
+    //this url pbly needs to be fixed
+    url = 'https://doc-0k-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/8n4l4ln3qts1soi8jsmuq6g3s1f6nv4r/1489356000000/13305965733609396212/*/0B1Iw4oNXJh2ARUk0dFpWYmZxWjQ?e=download'
+} else if(dataset.equals("amazon-books")) {
+    zipFile = "data/ratings_Books.zip"
+    //same
+    url = 'https://doc-0k-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/8n4l4ln3qts1soi8jsmuq6g3s1f6nv4r/1489356000000/13305965733609396212/*/0B1Iw4oNXJh2ARUk0dFpWYmZxWjQ?e=download'
+} else if(dataset.equals('amazon-digital-music')) {
+    zipFile = "data/ratings_Digital_Music.zip"
+    url = 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AVm1hdC1jekcxa0E'
+} else if(dataset.equals( 'amazon-grocery-gourmet-food')) {
+    zipFile = "data/amazon_Grocery_and_Gourmet_Food.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AVTRhelpDNHBYWk0&export=download'
+} else if(dataset.equals('amazon-health-personal-care')) {
+    zipFile = "data/ratings_Health_and_Personal_Care.zip"
+    url="https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
+} else if(dataset.equals('amazon-instant-video')) {
+    zipFile = "data/ratings_Amazon_Instant_Video.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AR2ppUTZwNUJhcFU&export=download'
+} else if(dataset.equals('amazon-musical-instruments')) {
+    zipFile = "data/ratings_Musical_Instruments.zip"
+    url = 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AUDdYTDBMTHFDQk0'
+} else if(dataset.equals("amazon-office-products")) {
+    zipFile = "data/amazon_Office_Products.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AQ0NCTmtQSFhSR3c&export=download'
+} else if(dataset.equals("amazon-patio-lawn-garden")) {
+    zipFile = "data/ratings_Patio_Lawn_and_Garden.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AdW5wbE5oUDNmVEE&export=download'
+} else if(dataset.equals("amazon-pet-supplies")) {
+    zipFile = "data/ratings_Pet_Supplies.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AZXhneXNzdTVNWUE&export=download'
+} else if(dataset.equals("amazon-tools-home-improvement")) {
+    zipFile = "data/ratings_Tools_and_Home_Improvement.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
+} else if(dataset.equals('amazon-toys-games')) {
+    zipFile = "data/ratings_Toys_and_Games.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
+} else if(dataset.equals( 'amazon-video-games')) {
+    zipFile = "data/amazon_Video_Games.zip"
+    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2ATWFCYWdfRVNJNFU&export=download'
+} else if(dataset.equals( 'bookcrossings')) {
+    zipFile = "data/bookcrossings.zip"
+    url = 'http://drive.google.com/uc?export=download&id=0B2lSBow_51i-X25lSlNsS09wRTQ'
+} else if(dataset.equals("jester")) {
+    zipFile = "data/jester.zip"
+    url='https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AQUV5SzZOUFMyREk'
+    pattern="jester/*"
+} else if(dataset.equals("lastfm-2k")) {
+    zipFile = "data/lastfm-2k.zip"
+    url='http://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip'
+    pattern='lastfm-2k/*'
+} else if(dataset.equals( 'ml-100k')) {
+    zipFile = "data/ml-100k.zip"
+    url = 'http://files.grouplens.org/papers/ml-100k.zip'
+    pattern='ml-100k/*'
+}
+
+//else: raiseError?
+
+task fetchData {
+    description 'Fetches the corresponding data set. '+ dataset
+    outputs.dir dataDir
+    outputs.file zipFile
+    doLast {
+        mkdir dataDir
+        ant {
+            get(src: url,
+                dest: zipFile,
+                skipExisting: true)
+            unzip(src: zipFile, dest: dataDir) {
+                patternset {
+                    include name: pattern
+                }
+                mapper type: 'flatten'
+            }
+        }
+    }
+}
+
+task crossfold(type: Crossfold, group: 'evaluate') {
+    // download data before evaluating
+    dependsOn fetchData
+    println 'Doing crossfold on dataset '+dataset
+
+    input yml
+    // test on random 1/5 of each user's ratings
+    holdoutFraction(0.2, 'random')
+    // use 5-fold cross-validation
+    partitionCount 5
+
+    outputDir "$buildDir/crossfold/"+dataset
+}
+
+task getCrossfoldData {
+    doLast {
+        description 'Copy to use in analyze'
+        delete "$buildDir/crossfold.out"
+        copy {
+            from "$buildDir/crossfold/"+dataset
+            into "$buildDir/crossfold.out"
+        }
+    }
 }
 
 /* Run the LensKit evaluation */
-task cleanAllData {
-    dependsOn 'cleanDataMovielens'
-    dependsOn 'cleanDataLastfm'
-    dependsOn 'cleanDataJester'
-    dependsOn 'cleanDataBookcrossings'
-    dependsOn 'cleanDataAmazonMusicalInstruments'
-    dependsOn 'cleanDataAmazonInstantVideo'
-    dependsOn 'cleanDataAmazonVideoGames'
-    dependsOn 'cleanDataAmazonBaby'
-    dependsOn 'cleanDataAmazonDigitalMusic'
-    dependsOn 'cleanDataAmazonGroceryGourmetFood'
-    dependsOn 'cleanDataAmazonOfficeProducts'
-    dependsOn 'cleanDataAmazonPatioLawnGarden'
-    dependsOn 'cleanDataAmazonPetSupplies'
-    dependsOn 'cleanDataAmazonBooks'
-    dependsOn 'cleanDataAmazonAutomotive'
-    dependsOn 'cleanDataAmazonAndroidApps'
-    dependsOn 'cleanDataAmazonBeauty'
-    dependsOn 'cleanDataAmazonHealthAndPersonalCare'
-    dependsOn 'cleanDataAmazonToolsAndHomeImprovement'
-    dependsOn 'cleanDataAmazonToysAndGames'
+task evaluate(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation.'
+    logFile "$buildDir/evaluate.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dependsOn getCrossfoldData
+    dataSet crossfold
+
+    // send the output to appropriate files
+    outputFile datasetResultFolder+"/eval-results.csv"
+    userOutputFile datasetResultFolder+"/eval-users.csv"
+
+    // configure our algorithms
+    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
+    algorithm 'ItemItem', 'algorithms/item-item.groovy'
+    algorithm 'UserUser', 'algorithms/user-user.groovy'
+    algorithm 'FunkSVD', 'algorithms/funksvd.groovy'
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+        metric 'ndcg'
+    }
+    recommend {
+        listSize 10
+        metric 'mrr'
+    }
+}
+
+task evaluateOutputs {
+    dependsOn evaluate
+
+    doLast{
+        description 'Copy to use in analyze'
+        copy {
+            from datasetResultFolder+"/eval-results.csv"
+            into "$buildDir"
+        }
+        copy {
+            from datasetResultFolder+"/eval-users.csv"
+            into "$buildDir"
+        }
+    }
+}
+
+
+task analyzeResults(type: Exec, group: 'evaluate') {
+    description 'Post-processes evaluation results to draw charts.'
+    dependsOn evaluateOutputs
+
+    inputs.files "$buildDir/eval-results.csv", 'analyze-output.ipynb'
+    outputs.file datasetResultFolder+"/analysis.html"
+
+    /* run Jupyter/IPython. Location can be overridden with -Pipython.bin=/usr/bin/ipython */
+    if (project.hasProperty('ipython.bin')) {
+        executable project.getProperty('ipython.bin')
+    } else {
+        executable 'jupyter'
+    }
+    args 'nbconvert', '--to', 'html', '--execute'
+    args '--output', file(datasetResultFolder+"/analysis.html")
+    args file("analyze-output.ipynb")
+
+    doLast {
+        delete "$buildDir/eval-results.csv"
+        delete "$buildDir/eval-users.csv"
+    }
 }
 
 task analyzeAllResults(type: Exec, group: 'evaluate') {
