@@ -13,5 +13,9 @@ bind ItemScorer to FunkSVDItemScorer
 bind (BaselineScorer, ItemScorer) to UserMeanItemScorer
 bind (UserMeanBaseline,ItemScorer) to ItemMeanRatingItemScorer
 
-set FeatureCount to 25
-set IterationCount to 125
+//load parameters
+int featcount = new File("algorithms/parameters/funksvd_featcount.txt").text.toInteger()
+int itercount = new File("algorithms/parameters/funksvd_itercount.txt").text.toInteger()
+
+set FeatureCount to featcount
+set IterationCount to itercount
