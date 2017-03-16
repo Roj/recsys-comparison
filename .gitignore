@@ -101,4 +101,4 @@ gradle.properties
 #but keep config files
 !/data/*.yml
 *.zip
-analyze-output.ipynb #for now we're not interested. maybe latter we'll add a dir for them 
+*.swp

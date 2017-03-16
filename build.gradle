@@ -178,8 +178,70 @@ task getCrossfoldData {
         }
     }
 }
+def set_hyperparameter(method,hyperparam_name,value) {
+	def f1 = new File("algorithms/parameters/"+method+"_"+hyperparam_name+".txt")
+	f1.text=value
 
+}
+def get_parameter_or_default(parameter_name,default_value) {
+	return (project.hasProperty(parameter_name)?  project.findProperty(parameter_name):default_value)
+}
+task testFileTask {
+	doLast{
+		set_hyperparameter("funksvd","featcount",32)
+	}
+}
+/*Configure algorithms*/
 /* Run the LensKit evaluation */
+task evaluateOneAlgorithm(type: TrainTest, group: 'evaluate') {
+    description 'Runs the LensKit evaluation for ONE algorithm. You need to specify the algorithm (-pmethod), as well as the hyperparameters, and the filename suffix (-psuffix).'
+    logFile "$buildDir/evaluate.log"
+    logFileLevel 'DEBUG'
+
+    // we add our crossfold task as evaluation input
+    dependsOn getCrossfoldData
+    dataSet crossfold
+
+	//get parameters
+	def method = get_parameter_or_default("method","user-user")
+	def suffix = get_parameter_or_default("suffix",30)
+	def neighborhood = get_parameter_or_default("neighborhood",30)
+	def featcount = get_parameter_or_default("featcount",25)
+	def itercount = get_parameter_or_default("itercount",125)
+
+    // send the output to appropriate files
+    outputFile datasetResultFolder+"/eval-results"+suffix+".csv"
+    userOutputFile datasetResultFolder+"/eval-users"+suffix+".csv"
+
+    // configure our algorithms
+	if(method.equals("item-item")) {
+		//hyperparams: neighborhood
+		set_hyperparameter("item-item","neighborhood",neighborhood)
+	    algorithm 'ItemItem'+neighborhood, 'algorithms/item-item.groovy'
+	} else if(method.equals("pers-mean")) {
+	    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
+	} else if(method.equals("user-user")) {
+		//hyperparams: neighborhood
+		set_hyperparameter("user-user","neighborhood",neighborhood)
+	    algorithm 'UserUser'+neighborhood, 'algorithms/user-user.groovy'
+	} else if(method.equals("funksvd")) {
+		//hyperparams: featcount, itercount
+		set_hyperparameter("funksvd","featcount",featcount)
+		set_hyperparameter("funksvd","itercount",itercount)
+	    algorithm 'FunkSVD'+featcount+"_"+itercount, 'algorithms/funksvd.groovy'
+		println "Loaded itercount: itercount"
+	}
+
+    // and some evaluation tasks and metrics
+    predict {
+        metric 'rmse'
+        metric 'ndcg'
+    }
+    recommend {
+        listSize 10
+        metric 'mrr'
+    }
+}
 task evaluate(type: TrainTest, group: 'evaluate') {
     description 'Runs the LensKit evaluation.'
     logFile "$buildDir/evaluate.log"
@@ -194,8 +256,8 @@ task evaluate(type: TrainTest, group: 'evaluate') {
     userOutputFile datasetResultFolder+"/eval-users.csv"
 
     // configure our algorithms
-    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
     algorithm 'ItemItem', 'algorithms/item-item.groovy'
+    algorithm 'PersMean', 'algorithms/pers-mean.groovy'
     algorithm 'UserUser', 'algorithms/user-user.groovy'
     algorithm 'FunkSVD', 'algorithms/funksvd.groovy'
 
