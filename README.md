@@ -11,8 +11,7 @@ To view a list of possible commands, just run
 
 `./gradlew tasks` 
 
-
-This will let you see which datasets are currently supported. For example, `./gradlew evaluateJester` will run the algorithms on the Jester dataset (and, if not already done, fetch the data and perform the folds). You can also run all datasets with `./gradlew evaluateAll`.
+To evaluate a dataset (e.g. Jester) just pass the dataset by a CLI argument (e.g. `./gradlew evaluate -Pdataset=jester`). This will run the algorithms and on the specified dataset and, if not already done, fetch the data and perform the folds.
 
 Results are under build/results/[dataset].
 
@@ -35,15 +34,15 @@ We don't push this to the repository for good practice, but you can always keep 
 New datasets can easily be added:  
 
 1. Configure a `.yml` file and put it under `data/`. You can use the other files as a template. In essence, you just need to specify the file which will hold the data once the zip has been downloaded and decompressed (gradle takes care of the two latter tasks).
-2. Configure a `.gradle` file in `dataset-tasks/`. Copy another dataset's file and use it as a template.
-3. Finally, include the gradle file in the `build.gradle`, around line 53.
+2. Configure the variables on the `build.gradle` (mainly zipFile, url and pattern).
 
 ### How to add new algorithms
 
-Adding new algorithms is even easier:   
+Adding new algorithms is similar:   
 
 1. Add a new groovy configuration file for the algorithm under `algorithms/`.  
 2. Add the new algorithm in the `evaluate` task in `build.gradle`.
+3. (Optional) Specify the parameters by loading them from a file in the directory `algorithms/parameters/`.
 
 ## References: 
 
