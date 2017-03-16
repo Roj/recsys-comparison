@@ -48,7 +48,7 @@ task fetchDataAmazonToolsAndHomeImprovement {
     doLast {
         mkdir dataDir
         ant {
-            get(src: 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download',
+            get(src: 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AMzlFRl9wbnd5eVU',
                     dest: zipFile,
                     skipExisting: true)
             unzip(src: zipFile, dest: dataDir) {
