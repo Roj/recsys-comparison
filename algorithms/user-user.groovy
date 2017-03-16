@@ -1,3 +1,4 @@
+//evaluate(new File("algorithms/parameters/useruser.groovy"))
 import org.lenskit.baseline.BaselineScorer
 import org.lenskit.baseline.UserMeanBaseline
 import org.lenskit.baseline.UserMeanItemScorer
@@ -20,5 +21,9 @@ within (UserVectorNormalizer) {
     // for normalization, just center on user means
     bind VectorNormalizer to MeanCenteringVectorNormalizer
 }
-set NeighborhoodSize to 30
+//load parameters
+int nbsize = new File("algorithms/parameters/user-user_neighborhood.txt").text.toInteger()
+
+set NeighborhoodSize to nbsize
+
 

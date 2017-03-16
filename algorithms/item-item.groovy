@@ -9,3 +9,7 @@ bind UserVectorNormalizer to BaselineSubtractingUserVectorNormalizer
 within (UserVectorNormalizer) {
     bind (BaselineScorer, ItemScorer) to ItemMeanRatingItemScorer
 }
+//load parameters
+int nbsize = new File("algorithms/parameters/item-item_neighborhood.txt").text.toInteger()
+
+set NeighborhoodSize to nbsize
