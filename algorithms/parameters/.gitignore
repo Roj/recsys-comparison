@@ -1,0 +1,9 @@
+#Once we've commited a hyperparam file, there's no need to 
+#update values. To prevent commit noise, please add it
+#here after commiting the first time.
+
+funksvd_featcount.txt
+funksvd_itercount.txt
+item-item_neighborhood.txt
+user-user_neighborhood.txt
+*.swp
