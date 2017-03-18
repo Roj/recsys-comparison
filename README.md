@@ -20,7 +20,7 @@ Once you've processed a few datasets, you can automatically process the results 
 ### Hyperparameter setting
 You can use the `evaluateOneAlgorithm` task to specify hyperparameters. For example: 
 
-`./gradlew evaluateOneAlgorithm -Pmethod=funksvd -Pfeatcount=25 -Pitercount=2 -Psuffix=10_03 -Pdataset=ml-100k`
+    ./gradlew evaluateOneAlgorithm -Pmethod=funksvd -Pfeatcount=25 -Pitercount=2 -Psuffix=10_03 -Pdataset=ml-100k
 
 Runs the `FunkSVD` algorithm on the `ml-100k`(small movielens) dataset, with hyperparameters `Feature Count = 25` and `Number of iterations = 2`. 
 
@@ -50,8 +50,7 @@ We don't push this to the repository for good practice, but you can always keep 
 
 New datasets can easily be added:  
 
-1. Configure a `.yml` file and put it under `data/`. You can use the other files as a template. In essence, you just need to specify the file which will hold the data once the zip has been downloaded and decompressed (gradle takes care of the two latter tasks).
-2. Configure the variables on the `build.gradle` (mainly zipFile, url and pattern).
+1. Configure a `.yml` file and put it under `data/`. You can use the other files as a template. In essence, you just need to specify the url and zipfile which will hold the data once the zip has been downloaded and decompressed (according to a pattern).
 
 ### How to add new algorithms
 
