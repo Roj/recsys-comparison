@@ -3,3 +3,8 @@ ratings:
   format: tsv
   header: true
   entity_type: rating
+  download_url: "http://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip"
+  #pattern is used to extract files inside zip
+  zip_file_pattern: "lastfm-2k/*"
+  #the name of the zip downloaded
+  zip_file: "lastfm-2k.zip"

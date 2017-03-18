@@ -3,3 +3,8 @@ ratings:
   format: csv
   header: false
   entity_type: rating
+  download_url: "https://docs.google.com/uc?id=0B1Iw4oNXJh2AVTRhelpDNHBYWk0&export=download"
+  #pattern is used to extract files inside zip
+  zip_file_pattern: "*"
+  #the name of the zip downloaded
+  zip_file: "amazon_Grocery_and_Gourmet_Food.zip" 

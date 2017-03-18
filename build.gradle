@@ -13,12 +13,14 @@ buildscript {
     }
     dependencies {
         classpath 'org.lenskit:lenskit-gradle:3.0-M2'
+		classpath "org.yaml:snakeyaml:1.17"
     }
 }
 apply plugin: 'java' // if you use Groovy or Scala, add those plugins
 apply plugin: 'lenskit'
 
 import org.lenskit.gradle.*
+import org.yaml.snakeyaml.Yaml
 /* Set up the repositories for getting LensKit and other libraries.
  * These repositories are used for your Java or Groovy code, and for running LensKit.
  */
@@ -34,7 +36,6 @@ dependencies {
     compile "org.lenskit:lenskit-all:3.0-M2"
     // To run the code, we also need the LensKit CLI.
     runtime "org.lenskit:lenskit-cli:3.0-M2"
-
     // Tests use JUnit
     testCompile "junit:junit:4.12"
 }
@@ -49,93 +50,29 @@ lenskit {
         threadCount = lenskitThreadCount.toInteger()
     }
 }
-
-/*Configure dataset values*/
-
 def dataset = (project.hasProperty("dataset"))? dataset : "ml-100k"
 def dataDir = 'data/'+dataset
-def zipFile = ""
+def zipFile = "data/"
 def url = ""
 def pattern = "*"
 def yml = "data/"+dataset+".yml"
 def datasetResultFolder = "$buildDir/results/"+dataset;
 
-//I couldn't find a switch in groovy/gradle. 
-if(dataset.equals('amazon-android-apps')) {
-    zipFile = "data/ratings_Apps_for_Android.zip"
-    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
-    yml = data/amazon-android-apps.yml
-} else if(dataset.equals( 'amazon-automotive')) {
-    zipFile = "data/ratings_Automotive.zip"
-    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
-} else if(dataset.equals('amazon-baby')) {
-    zipFile = "data/ratings_Baby.zip"
-    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
-} else if(dataset.equals('amazon-beauty')) {
-    zipFile = "data/ratings_Beauty.zip"
-    url = "https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
-} else if(dataset.equals( 'amazon-books')) {
-    zipFile = "data/ratings_Books.zip"
-    //this url pbly needs to be fixed
-    url = 'https://doc-0k-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/8n4l4ln3qts1soi8jsmuq6g3s1f6nv4r/1489356000000/13305965733609396212/*/0B1Iw4oNXJh2ARUk0dFpWYmZxWjQ?e=download'
-} else if(dataset.equals("amazon-books")) {
-    zipFile = "data/ratings_Books.zip"
-    //same
-    url = 'https://doc-0k-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/8n4l4ln3qts1soi8jsmuq6g3s1f6nv4r/1489356000000/13305965733609396212/*/0B1Iw4oNXJh2ARUk0dFpWYmZxWjQ?e=download'
-} else if(dataset.equals('amazon-digital-music')) {
-    zipFile = "data/ratings_Digital_Music.zip"
-    url = 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AVm1hdC1jekcxa0E'
-} else if(dataset.equals( 'amazon-grocery-gourmet-food')) {
-    zipFile = "data/amazon_Grocery_and_Gourmet_Food.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AVTRhelpDNHBYWk0&export=download'
-} else if(dataset.equals('amazon-health-personal-care')) {
-    zipFile = "data/ratings_Health_and_Personal_Care.zip"
-    url="https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download"
-} else if(dataset.equals('amazon-instant-video')) {
-    zipFile = "data/ratings_Amazon_Instant_Video.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AR2ppUTZwNUJhcFU&export=download'
-} else if(dataset.equals('amazon-musical-instruments')) {
-    zipFile = "data/ratings_Musical_Instruments.zip"
-    url = 'https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AUDdYTDBMTHFDQk0'
-} else if(dataset.equals("amazon-office-products")) {
-    zipFile = "data/amazon_Office_Products.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AQ0NCTmtQSFhSR3c&export=download'
-} else if(dataset.equals("amazon-patio-lawn-garden")) {
-    zipFile = "data/ratings_Patio_Lawn_and_Garden.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AdW5wbE5oUDNmVEE&export=download'
-} else if(dataset.equals("amazon-pet-supplies")) {
-    zipFile = "data/ratings_Pet_Supplies.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AZXhneXNzdTVNWUE&export=download'
-} else if(dataset.equals("amazon-tools-home-improvement")) {
-    zipFile = "data/ratings_Tools_and_Home_Improvement.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
-} else if(dataset.equals('amazon-toys-games')) {
-    zipFile = "data/ratings_Toys_and_Games.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2AU3Y0ZWtVdlNjcm8&export=download'
-} else if(dataset.equals( 'amazon-video-games')) {
-    zipFile = "data/amazon_Video_Games.zip"
-    url = 'https://docs.google.com/uc?id=0B1Iw4oNXJh2ATWFCYWdfRVNJNFU&export=download'
-} else if(dataset.equals( 'bookcrossings')) {
-    zipFile = "data/bookcrossings.zip"
-    url = 'http://drive.google.com/uc?export=download&id=0B2lSBow_51i-X25lSlNsS09wRTQ'
-} else if(dataset.equals("jester")) {
-    zipFile = "data/jester.zip"
-    url='https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AQUV5SzZOUFMyREk'
-    pattern="jester/*"
-} else if(dataset.equals("lastfm-2k")) {
-    zipFile = "data/lastfm-2k.zip"
-    url='http://files.grouplens.org/datasets/hetrec2011/hetrec2011-lastfm-2k.zip'
-    pattern='lastfm-2k/*'
-} else if(dataset.equals( 'ml-100k')) {
-    zipFile = "data/ml-100k.zip"
-    url = 'http://files.grouplens.org/papers/ml-100k.zip'
-    pattern='ml-100k/*'
+task loadDatasetYAML {
+	Yaml parser = new Yaml()
+	LinkedHashMap example = parser.load((yml as File).text)
+	//example.each{println it.subject}
+
+	url=example.ratings.download_url
+	pattern=example.ratings.zip_file_pattern
+	zipFile=zipFile+example.ratings.zip_file
 }
 
-//else: raiseError?
+/*Configure dataset values*/
 
 task fetchData {
-    description 'Fetches the corresponding data set. '+ dataset
+    description 'Fetches the corresponding data set. '
+	dependsOn loadDatasetYAML
     outputs.dir dataDir
     outputs.file zipFile
     doLast {
@@ -157,7 +94,6 @@ task fetchData {
 task crossfold(type: Crossfold, group: 'evaluate') {
     // download data before evaluating
     dependsOn fetchData
-    println 'Doing crossfold on dataset '+dataset
 
     input yml
     // test on random 1/5 of each user's ratings
