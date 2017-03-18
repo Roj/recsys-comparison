@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-electronics/ratings_Electronics.csv
+  format: csv
+  header: false
+  entity_type: rating

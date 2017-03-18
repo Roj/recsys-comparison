@@ -1,0 +1,5 @@
+ratings:
+  file: amazon-CDs-vinyl/ratings_CDs_and_Vinyl.csv
+  format: csv
+  header: false
+  entity_type: rating
