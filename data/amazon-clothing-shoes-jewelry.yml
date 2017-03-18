@@ -3,3 +3,8 @@ ratings:
   format: csv
   header: false
   entity_type: rating
+  download_url: "https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2AZmhXTTJrazh2ZlE"
+  #pattern is used to extract files inside zip
+  zip_file_pattern: "*"
+  #the name of the zip downloaded
+  zip_file: "ratings_Clothing_Shoes_and_Jewelry.zip"
