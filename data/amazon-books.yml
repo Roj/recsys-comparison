@@ -3,7 +3,7 @@ ratings:
   format: csv
   header: false
   entity_type: rating
-  download_url: "https://doc-0k-6s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/8n4l4ln3qts1soi8jsmuq6g3s1f6nv4r/1489356000000/13305965733609396212/*/0B1Iw4oNXJh2ARUk0dFpWYmZxWjQ?e=download"
+  download_url: "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=28226433&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2FPublic%2FMatias%2Frecsys-comparison%2Fdata%2Fratings_Books.zip%3Fdevice_user_id%3D28226433%26request_auth_code%3Da78dbea3236b7e33ffaa29f466e365065f0fe932f2aa10fdb071ac5213c784e1"
   #pattern is used to extract files inside zip
   zip_file_pattern: "*"
   #the name of the zip downloaded

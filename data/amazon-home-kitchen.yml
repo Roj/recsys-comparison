@@ -3,7 +3,7 @@ ratings:
   format: csv
   header: false
   entity_type: rating
-  download_url: "https://drive.google.com/uc?export=download&id=0B1Iw4oNXJh2ANmZJYUpNMWhJVlk"
+  download_url: "https://apia.wd2go.com/api/1.0/rest/device_redirect?device_user_id=28226433&device_uri=%2Fapi%2F1.0%2Frest%2Ffile_contents%2FPublic%2FMatias%2Frecsys-comparison%2Fdata%2Fratings_Home_and_Kitchen.zip%3Fdevice_user_id%3D28226433%26request_auth_code%3Dfce56e766d57e3b06a56ff2af9820d288bb09866676c8c5d53cbc5558640cec7"
   #pattern is used to extract files inside zip
   zip_file_pattern: "*"
   #the name of the zip downloaded
