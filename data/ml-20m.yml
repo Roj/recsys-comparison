@@ -1,0 +1,10 @@
+ratings:
+  file: ml-20m/ratings.csv
+  format: csv
+  header: true
+  entity_type: rating
+  download_url: "http://files.grouplens.org/datasets/movielens/ml-20m.zip"
+  #pattern is used to extract files inside zip
+  zip_file_pattern: "ml-20m/*"
+  #the name of the zip downloaded
+  zip_file: "ml-20m.zip"

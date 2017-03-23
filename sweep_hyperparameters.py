@@ -2,10 +2,39 @@
 import random
 import os
 import time
-DEBUG = True
+DEBUG = False
 SEED = 42
-N_REPETITIONS = 2
-datasets = ["ml-100k","lastfm-2k"]
+N_REPETITIONS = 10
+datasets = [
+"amazon-CDs-vinyl",
+"amazon-android-apps",
+"amazon-automotive",
+"amazon-baby",
+"amazon-beauty",
+"amazon-books",
+"amazon-cell-phones-accessories",
+"amazon-clothing-shoes-jewelry",
+"amazon-digital-music",
+"amazon-electronics",
+"amazon-grocery-gourmet-food",
+"amazon-health-personal-care",
+"amazon-home-kitchen",
+"amazon-instant-video",
+"amazon-kindle-store",
+"amazon-movies-TV",
+"amazon-musical-instruments",
+"amazon-office-products",
+"amazon-patio-lawn-garden",
+"amazon-pet-supplies",
+"amazon-sports-outdoors",
+"amazon-tools-home-improvement",
+"amazon-toys-games",
+"amazon-video-games",
+"bookcrossings",
+"jester",
+"lastfm-2k",
+"ml-100k",
+"ml-20m"]
 
 #algorithms is a map String -> List of maps (name -> range)
 algorithms = dict()
