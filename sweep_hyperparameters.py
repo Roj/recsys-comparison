@@ -36,11 +36,10 @@ parser.add_argument('--datasets', nargs='*', default = [
 "lastfm-2k",
 "ml-100k",
 "ml-20m"])
-parser.add_argument("--debug", type=bool, default=False)
 
 args = parser.parse_args()
 
-DEBUG = parser.debug
+DEBUG = False
 SEED = 42
 N_REPETITIONS = int(args.repetitions)
 datasets = args.datasets
