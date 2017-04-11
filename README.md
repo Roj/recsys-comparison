@@ -9,7 +9,7 @@ Initial setup is taken from [eval-quickstart](https://github.com/lenskit/eval-qu
 
 To view a list of possible commands, just run
 
-`./gradlew tasks` 
+`./gradlew tasks`
 
 To evaluate a dataset (e.g. Jester) just pass the dataset by a CLI argument (e.g. `./gradlew evaluate -Pdataset=jester`). This will run the algorithms and on the specified dataset and, if not already done, fetch the data and perform the folds.
 
@@ -18,13 +18,13 @@ Results are under build/results/[dataset].
 Once you've processed a few datasets, you can automatically process the results with `./gradlew analyzeAllResults`, which runs the python notebooks and saves the results on an `.html` file.
 
 ### Hyperparameter setting
-You can use the `evaluateOneAlgorithm` task to specify hyperparameters. For example: 
+You can use the `evaluateOneAlgorithm` task to specify hyperparameters. For example:
 
     ./gradlew evaluateOneAlgorithm -Pmethod=funksvd -Pfeatcount=25 -Pitercount=2 -Psuffix=10_03 -Pdataset=ml-100k
 
-Runs the `FunkSVD` algorithm on the `ml-100k`(small movielens) dataset, with hyperparameters `Feature Count = 25` and `Number of iterations = 2`. 
+Runs the `FunkSVD` algorithm on the `ml-100k`(small movielens) dataset, with hyperparameters `Feature Count = 25` and `Number of iterations = 2`.
 
-Since in the general case this command is run multiple times with variations only on the values of the parameters, the `suffix` is appended to the name of the CSVs so they don't get overwritten. 
+Since in the general case this command is run multiple times with variations only on the values of the parameters, the `suffix` is appended to the name of the CSVs so they don't get overwritten.
 
 You can later concatenate the CSVs to compare the performance of the hyperparameters.
 
@@ -60,8 +60,15 @@ Adding new algorithms is similar:
 2. Add the new algorithm in the `evaluate` task in `build.gradle`.
 3. (Optional) Specify the parameters by loading them from a file in the directory `algorithms/parameters/`.
 
+### How to sweep parameters
 
-## References: 
+The sweep_hyperparameters.py file allows to sweep parameters for each dataset. Example for using ml-110k with 25 swaps
+
+ ```
+ python sweep_hyperparameters.py --datasets ml-100k --repetitions 25
+ ```
+
+## References:
 
 · [Said, A & Bellogin, A: Comparative Recommender System Evaluation: Benchmarking Recommendation Frameworks](https://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdfhttps://pdfs.semanticscholar.org/036e/8fb63a82ee26537b514b17a51cc197016e4c.pdf)  
 · [Ekstrand, M. D., Lenskit reference](https://md.ekstrandom.net/research/thesis/mde-thesis.pdf)  

@@ -36,7 +36,7 @@ parser.add_argument('--datasets', nargs='*', default = [
 "lastfm-2k",
 "ml-100k",
 "ml-20m"])
-parser.add_argument("--debug", type=bool, False)
+parser.add_argument("--debug", type=bool, default=False)
 
 args = parser.parse_args()
 
