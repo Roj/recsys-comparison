@@ -2,10 +2,11 @@
 import random
 import os
 import time
-DEBUG = False
-SEED = 42
-N_REPETITIONS = 10
-datasets = [
+import argparse
+
+parser = argparse.ArgumentParser() 
+parser.add_argument('--repetitions', type=int, default = 10)
+parser.add_argument('--datasets', nargs='*', default = [
 "amazon-CDs-vinyl",
 "amazon-android-apps",
 "amazon-automotive",
@@ -34,8 +35,15 @@ datasets = [
 "jester",
 "lastfm-2k",
 "ml-100k",
-"ml-20m"]
+"ml-20m"])
+parser.add_argument("--debug", type=bool, False)
 
+args = parser.parse_args()
+
+DEBUG = parser.debug
+SEED = 42
+N_REPETITIONS = int(args.repetitions)
+datasets = args.datasets
 #algorithms is a map String -> List of maps (name -> range)
 algorithms = dict()
 algorithms["funksvd"] = {'itercount':{'max':500,'min':100},'featcount':{'max':100,'min':3}}
