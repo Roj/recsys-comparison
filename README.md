@@ -34,10 +34,10 @@ You can later concatenate the CSVs to compare the performance of the hyperparame
 
 For now we are not running the same hyperparameters for each dataset, each instance is being randomly sampled. This may change in future versions.
 
-The sweep_hyperparameters.py file allows to sweep parameters for each dataset. Example for using ml-110k with 25 swaps
+The sweep_hyperparameters.py file allows to sweep parameters for each dataset. Example for using ml-110k and lastfm with 25 swaps
 
  ```
- python sweep_hyperparameters.py --datasets ml-100k --repetitions 25
+ python sweep_hyperparameters.py --datasets ml-100k lastfm --repetitions 25
  ```
 
 ### Properties
