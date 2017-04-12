@@ -34,6 +34,12 @@ You can later concatenate the CSVs to compare the performance of the hyperparame
 
 For now we are not running the same hyperparameters for each dataset, each instance is being randomly sampled. This may change in future versions.
 
+The sweep_hyperparameters.py file allows to sweep parameters for each dataset. Example for using ml-110k with 25 swaps
+
+ ```
+ python sweep_hyperparameters.py --datasets ml-100k --repetitions 25
+ ```
+
 ### Properties
 Depending on the size of the dataset and your computer's capacity, you may wish to specify properties such as the maximum heap space available for the Java Virtual Machine or the threads to use during execution. A common `gradle.properties` for this is as follows:
 
@@ -60,13 +66,6 @@ Adding new algorithms is similar:
 2. Add the new algorithm in the `evaluate` task in `build.gradle`.
 3. (Optional) Specify the parameters by loading them from a file in the directory `algorithms/parameters/`.
 
-### How to sweep parameters
-
-The sweep_hyperparameters.py file allows to sweep parameters for each dataset. Example for using ml-110k with 25 swaps
-
- ```
- python sweep_hyperparameters.py --datasets ml-100k --repetitions 25
- ```
 
 ## References:
 
